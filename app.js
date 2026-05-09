@@ -16,14 +16,7 @@ const SUBJECTS = [
                     { name: "DAA Textbook.pdf", path: "DAA/mcq/Design & Analysis of Algorithm  textbook.pdf", size: "2.4 MB" }
                 ]
             },
-            {
-                name: "Prithvi Sir Notes",
-                files: [
-                    { name: "DAA Unit 1.pdf", path: "DAA/written notes/DAA_Unit 1.pdf", size: "11.6 MB" },
-                    { name: "DAA Unit 2.pdf", path: "DAA/written notes/DAA_Unit 2.pdf", size: "10.7 MB" },
-                    { name: "DAA Unit 3.pdf", path: "DAA/written notes/DAA_unit3.pdf", size: "5.3 MB" }
-                ]
-            },
+
             {
                 name: "Written Notes",
                 files: [
