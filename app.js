@@ -19,18 +19,18 @@ const SUBJECTS = [
             {
                 name: "Prithvi Sir Notes",
                 files: [
-                    { name: "DAA Unit 1.pdf", path: "DAA/prithvi sir notes/DAA_Unit 1.pdf", size: "11.6 MB" },
-                    { name: "DAA Unit 2.pdf", path: "DAA/prithvi sir notes/DAA_Unit 2.pdf", size: "10.7 MB" },
-                    { name: "DAA Unit 3.pdf", path: "DAA/prithvi sir notes/DAA_unit3.pdf", size: "5.3 MB" }
+                    { name: "DAA Unit 1.pdf", path: "DAA/written notes/DAA_Unit 1.pdf", size: "11.6 MB" },
+                    { name: "DAA Unit 2.pdf", path: "DAA/written notes/DAA_Unit 2.pdf", size: "10.7 MB" },
+                    { name: "DAA Unit 3.pdf", path: "DAA/written notes/DAA_unit3.pdf", size: "5.3 MB" }
                 ]
             },
             {
                 name: "Written Notes",
                 files: [
-                    { name: "DAA.pdf", path: "DAA/written notes/Daa.pdf", size: "7.3 MB" },
-                    { name: "Unit 1 - Ch 1 & 2.pdf", path: "DAA/written notes/unit 1/DAA-Unit1-chapter 1 and 2.pdf", size: "5.5 MB" },
-                    { name: "Unit 1 - Ch 3.pdf", path: "DAA/written notes/unit 1/💥💥DAA Unit-1_chapter 3.pdf", size: "3.2 MB" },
-                    { name: "Unit 1 - Ch 4.pdf", path: "DAA/written notes/unit 1/💥💥DAA Unit 1-chapter 4.pdf", size: "3.2 MB" }
+                    { name: "DAA.pdf", path: "DAA/written notes/written notes/Daa.pdf", size: "7.3 MB" },
+                    { name: "Unit 1 - Ch 1 & 2.pdf", path: "DAA/written notes/written notes/unit 1/DAA-Unit1-chapter 1 and 2.pdf", size: "5.5 MB" },
+                    { name: "Unit 1 - Ch 3.pdf", path: "DAA/written notes/written notes/unit 1/💥💥DAA Unit-1_chapter 3.pdf", size: "3.2 MB" },
+                    { name: "Unit 1 - Ch 4.pdf", path: "DAA/written notes/written notes/unit 1/💥💥DAA Unit 1-chapter 4.pdf", size: "3.2 MB" }
                 ]
             },
             {
