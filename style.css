@@ -722,6 +722,103 @@ body {
     color: var(--accent-primary);
 }
 
+/* Image Viewer */
+.image-viewer {
+    max-width: 100%;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-lg);
+    object-fit: contain;
+    transition: transform 0.2s ease;
+}
+
+/* PPT Viewer (iframe) */
+.ppt-viewer {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: #1a1a25;
+    position: absolute;
+    inset: 0;
+}
+
+.pdf-canvas-container {
+    position: relative;
+}
+
+/* PPT Fallback */
+.ppt-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+}
+
+.fallback-card {
+    text-align: center;
+    padding: 48px 40px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    backdrop-filter: blur(20px);
+    max-width: 400px;
+}
+
+.fallback-card h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 20px 0 8px;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.fallback-card p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+}
+
+.fallback-hint {
+    color: var(--text-muted) !important;
+    font-size: 0.78rem !important;
+    margin-bottom: 24px !important;
+}
+
+.fallback-btn {
+    padding: 12px 28px;
+    border-radius: var(--radius-md);
+    border: none;
+    background: var(--accent-gradient);
+    color: white;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-glow);
+}
+
+.fallback-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
+}
+
+/* File type badges */
+.file-icon.ppt {
+    background: rgba(249, 115, 22, 0.15) !important;
+    color: #f97316 !important;
+}
+
+.file-icon.img {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #10b981 !important;
+}
+
 /* Bottom Bar */
 .viewer-bottombar {
     height: 48px;

@@ -1,4 +1,4 @@
-// ===== PDF Data Structure =====
+// ===== File Data Structure =====
 const SUBJECTS = [
     {
         name: "DAA",
@@ -25,18 +25,21 @@ const SUBJECTS = [
                 ]
             },
             {
-                name: "Written Notes",
-                files: [
-                    { name: "DAA.pdf", path: "DAA/written notes/written notes/Daa.pdf", size: "7.3 MB" },
-                    { name: "Unit 1 - Ch 1 & 2.pdf", path: "DAA/written notes/written notes/unit 1/DAA-Unit1-chapter 1 and 2.pdf", size: "5.5 MB" },
-                    { name: "Unit 1 - Ch 3.pdf", path: "DAA/written notes/written notes/unit 1/💥💥DAA Unit-1_chapter 3.pdf", size: "3.2 MB" },
-                    { name: "Unit 1 - Ch 4.pdf", path: "DAA/written notes/written notes/unit 1/💥💥DAA Unit 1-chapter 4.pdf", size: "3.2 MB" }
-                ]
-            },
-            {
                 name: "Lab",
                 files: [
                     { name: "DAA Lab Programs.pdf", path: "DAA/lab/DAA list of programs -Part A+Part B.pdf", size: "641 KB" }
+                ]
+            },
+            {
+                name: "Slides",
+                files: [
+                    { name: "DAA Unit 1 Slides.pptx", path: "DAA/sslides/DAA_UNIT_1.pptx", size: "14.5 MB" },
+                    { name: "DAA Unit 2 Slides.pptx", path: "DAA/sslides/DAA_UNIT_2.pptx", size: "21.7 MB" },
+                    { name: "DAA Unit 3 Slides.pptx", path: "DAA/sslides/DAA_UNIT_3.pptx", size: "38.6 MB" },
+                    { name: "DAA Unit 3 Slides (v2).pptx", path: "DAA/sslides/DAA_UNIT_3 (1).pptx", size: "21.3 MB" },
+                    { name: "DAA Unit 5 Slides.pptx", path: "DAA/sslides/DAA_UNIT_5.pptx", size: "36.6 MB" },
+                    { name: "Bellman Ford Algorithm.pptx", path: "DAA/sslides/BELLMAN FORD ALGORITHM.pptx", size: "33.5 MB" },
+                    { name: "Greedy Technique.pptx", path: "DAA/sslides/GREEDY TECHNIQUE.pptx", size: "48.9 MB" }
                 ]
             }
         ]
@@ -51,9 +54,25 @@ const SUBJECTS = [
             { name: "Database Systems Guide 2.pdf", path: "DBMS/DatabaseSystems_Guide 2.pdf", size: "456 KB" },
             { name: "Neat Notes DBMS.pdf", path: "DBMS/Neat notes DBMS.pdf", size: "9.1 MB" },
             { name: "QB Unit 2 Answers.pdf", path: "DBMS/QB_Unit2_Answers.pdf", size: "44 KB" },
-            { name: "Relational Model & Algebra.pdf", path: "DBMS/Relational model and Relational Algebra (1).pdf", size: "3.0 MB" }
+            { name: "Relational Model & Algebra.pdf", path: "DBMS/Relational model and Relational Algebra (1).pdf", size: "3.0 MB" },
+            { name: "Database Design.pptx", path: "DBMS/1. Database design (1).pptx", size: "1.1 MB" },
+            { name: "SQL Language Slides.pptx", path: "DBMS/Structured Query Lang-update.pptx", size: "1.7 MB" },
+            { name: "DBMS Notes Image 1.jpeg", path: "DBMS/WhatsApp Image 2026-04-02 at 21.31.57.jpeg", size: "1.4 MB" },
+            { name: "DBMS Notes Image 2.jpeg", path: "DBMS/WhatsApp Image 2026-04-02 at 21.31.58.jpeg", size: "970 KB" }
         ],
-        subcategories: []
+        subcategories: [
+            {
+                name: "Unit 3",
+                files: [
+                    { name: "Ch8 Storage & Indexing Overview.pdf", path: "DBMS/DBMS-UNIT-3/Ch8_Storage_Indexing_Overview (2).pdf", size: "1.2 MB" },
+                    { name: "Ch9 Disks & Files.pdf", path: "DBMS/DBMS-UNIT-3/Ch9_Disks_Files.pdf", size: "1.1 MB" },
+                    { name: "Ch10 Tree Index.pdf", path: "DBMS/DBMS-UNIT-3/Ch10_Tree_Index.pdf", size: "1.0 MB" },
+                    { name: "Ch12 Overview Query Evaluation.pdf", path: "DBMS/DBMS-UNIT-3/Ch12_Overview_Query_Evaluation.pdf", size: "912 KB" },
+                    { name: "Ch17 Concurrency Control.pdf", path: "DBMS/DBMS-UNIT-3/Ch17_CC-95.pdf", size: "2.1 MB" },
+                    { name: "Ch16 Transactions.pptx", path: "DBMS/DBMS-UNIT-3/ch16-Transaction.pptx", size: "586 KB" }
+                ]
+            }
+        ]
     },
     {
         name: "M4",
@@ -66,7 +85,17 @@ const SUBJECTS = [
             { name: "MSE 1 Handwritten Notes.pdf", path: "M4/mse 1 hand written.pdf", size: "23.7 MB" },
             { name: "MSE 1 Handwritten Notes 2.pdf", path: "M4/mse 1 hand written 2.pdf", size: "23.7 MB" }
         ],
-        subcategories: []
+        subcategories: [
+            {
+                name: "Images",
+                files: [
+                    { name: "Math Notes Image 1.jpeg", path: "M4/WhatsApp Image 2026-04-02 at 21.31.55.jpeg", size: "617 KB" },
+                    { name: "Math Notes Image 2.jpeg", path: "M4/WhatsApp Image 2026-04-02 at 21.31.56.jpeg", size: "650 KB" },
+                    { name: "Math Notes Image 3.jpeg", path: "M4/WhatsApp Image 2026-04-03 at 14.33.19.jpeg", size: "458 KB" },
+                    { name: "Math Notes Image 4.jpeg", path: "M4/WhatsApp Image 2026-04-05 at 18.22.19.jpeg", size: "83 KB" }
+                ]
+            }
+        ]
     },
     {
         name: "MP & ES",
@@ -82,7 +111,30 @@ const SUBJECTS = [
                 files: [
                     { name: "8086 Detailed 10-Mark Answers.pdf", path: "MP & ES/mp unit 1/8086_Detailed_10Mark_Answers.pdf", size: "97 KB" },
                     { name: "8086 Master Exam Guide.pdf", path: "MP & ES/mp unit 1/8086_Master_Exam_Guide.pdf", size: "57 KB" },
-                    { name: "MP Unit 1 QBank.pdf", path: "MP & ES/mp unit 1/MP_UNIT1_QBANK_copy.pdf", size: "299 KB" }
+                    { name: "MP Unit 1 QBank.pdf", path: "MP & ES/mp unit 1/MP_UNIT1_QBANK_copy.pdf", size: "299 KB" },
+                    { name: "8086 Architecture.ppt", path: "MP & ES/mp unit 1/1_Architecture (1).ppt", size: "1.4 MB" },
+                    { name: "8086 Instruction Set.ppt", path: "MP & ES/mp unit 1/3-8086 instruction set-1.ppt", size: "1.5 MB" },
+                    { name: "8086 Assembler Directives.pptx", path: "MP & ES/mp unit 1/4-8086 Assembler Directives.pptx", size: "98 KB" },
+                    { name: "Addressing Modes.pptx", path: "MP & ES/mp unit 1/Addressing modes.pptx", size: "296 KB" }
+                ]
+            },
+            {
+                name: "Unit 2",
+                files: [
+                    { name: "Modular Programming.pptx", path: "MP & ES/mp unit 2/1-Modular Programming.pptx", size: "84 KB" },
+                    { name: "Data Conversions.pptx", path: "MP & ES/mp unit 2/2-Data Conversions.pptx", size: "94 KB" },
+                    { name: "Keyboard & Video Display.pptx", path: "MP & ES/mp unit 2/3-Using the Key Board and Video Display modified.pptx", size: "124 KB" },
+                    { name: "ARM Processor & Embedded Systems.pptx", path: "MP & ES/mp unit 2/4.ARM processor and embeded system.pptx", size: "539 KB" },
+                    { name: "Embedded C Programming.ppt", path: "MP & ES/mp unit 2/5.Embedded C Programming - modified.ppt", size: "3.9 MB" },
+                    { name: "MP Unit 2 Notes Image.jpeg", path: "MP & ES/mp unit 2/WhatsApp Image 2026-04-02 at 21.31.57.jpeg", size: "980 KB" }
+                ]
+            },
+            {
+                name: "Unit 3",
+                files: [
+                    { name: "Instruction Formats.ppt", path: "MP & ES/mp unit 3/1-Instruction Formats.ppt", size: "3.7 MB" },
+                    { name: "8086 Interrupts & 8259A.ppt", path: "MP & ES/mp unit 3/3-8086Interrupts and 8259A.ppt", size: "461 KB" },
+                    { name: "Hardware Specifications 8086.ppt", path: "MP & ES/mp unit 3/hardware specifications-8086.ppt", size: "3.3 MB" }
                 ]
             }
         ]
@@ -102,7 +154,19 @@ const SUBJECTS = [
             { name: "SEPM 10-Mark Answers.pdf", path: "SEPM/sepm_10mark_answers.pdf", size: "3.1 MB" },
             { name: "Unit 2.pdf", path: "SEPM/unit 2 .pdf", size: "317 KB" }
         ],
-        subcategories: []
+        subcategories: [
+            {
+                name: "Photos",
+                files: [
+                    { name: "SEPM Notes Photo 1.jpg", path: "SEPM/PHOTO-2026-05-07-21-16-20.jpg", size: "115 KB" },
+                    { name: "SEPM Notes Photo 2.jpg", path: "SEPM/PHOTO-2026-05-07-21-16-52.jpg", size: "133 KB" },
+                    { name: "SEPM Notes Photo 3.jpg", path: "SEPM/PHOTO-2026-05-07-21-17-26.jpg", size: "175 KB" },
+                    { name: "SEPM Notes Photo 4.jpg", path: "SEPM/PHOTO-2026-05-07-21-17-26 2.jpg", size: "129 KB" },
+                    { name: "SEPM Notes Photo 5.jpg", path: "SEPM/PHOTO-2026-05-07-21-17-27.jpg", size: "165 KB" },
+                    { name: "SEPM Notes Photo 6.jpg", path: "SEPM/PHOTO-2026-05-07-21-17-27 2.jpg", size: "185 KB" }
+                ]
+            }
+        ]
     }
 ];
 
@@ -120,6 +184,30 @@ let zoomScale = 1.0;
 let rendering = false;
 let pendingRender = null;
 let twoPageMode = false;
+let currentFileType = 'pdf'; // 'pdf', 'ppt', 'image'
+
+// ===== File Type Detection =====
+function getFileType(path) {
+    const ext = path.split('.').pop().toLowerCase();
+    if (ext === 'pdf') return 'pdf';
+    if (['ppt', 'pptx'].includes(ext)) return 'ppt';
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(ext)) return 'image';
+    return 'pdf';
+}
+
+function getFileLabel(path) {
+    const t = getFileType(path);
+    if (t === 'ppt') return 'PPT';
+    if (t === 'image') return 'IMG';
+    return 'PDF';
+}
+
+function getFileIconClass(path) {
+    const t = getFileType(path);
+    if (t === 'ppt') return 'ppt';
+    if (t === 'image') return 'img';
+    return '';
+}
 
 // ===== DOM Elements =====
 const sidebar = document.getElementById('sidebar');
@@ -195,9 +283,11 @@ function buildSidebar() {
 }
 
 function fileItemHTML(file, color, isSub = false) {
+    const label = getFileLabel(file.path);
+    const iconCls = getFileIconClass(file.path);
     return `
-    <div class="file-item ${isSub ? 'sub-file' : ''}" data-path="${file.path}" onclick="openPdf('${encodeURIComponent(file.path)}', '${escapeHtml(file.name)}')">
-        <div class="file-icon" style="background: ${color}22; color: ${color}">PDF</div>
+    <div class="file-item ${isSub ? 'sub-file' : ''}" data-path="${file.path}" onclick="openFile('${encodeURIComponent(file.path)}', '${escapeHtml(file.name)}')">
+        <div class="file-icon ${iconCls}" style="background: ${color}22; color: ${color}">${label}</div>
         <span class="file-name" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</span>
         <span class="file-size">${file.size}</span>
         <button class="btn-dl" onclick="event.stopPropagation(); downloadPdf('${encodeURIComponent(file.path)}', '${escapeHtml(file.name)}')" title="Download">
@@ -243,12 +333,13 @@ function expandSubject(name) {
     }
 }
 
-// ===== Open PDF =====
-async function openPdf(encodedPath, name) {
+// ===== Open File (multi-format) =====
+function openFile(encodedPath, name) {
     const path = decodeURIComponent(encodedPath);
     currentPdf = path;
     currentPage = 1;
     zoomScale = 1.0;
+    currentFileType = getFileType(path);
 
     document.querySelectorAll('.file-item').forEach(el => el.classList.remove('active'));
     const activeItem = document.querySelector(`.file-item[data-path="${CSS.escape(path)}"]`);
@@ -258,11 +349,51 @@ async function openPdf(encodedPath, name) {
     pdfViewer.style.display = 'flex';
     viewerTitle.textContent = name;
     zoomLevelEl.textContent = '100%';
-
-    loadingSpinner.classList.add('visible');
-    pagesWrapper.style.display = 'none';
     closeSidebar();
 
+    // Hide all viewer types first
+    hideAllViewers();
+
+    // Show/hide controls based on type
+    const pageControls = [document.getElementById('btnPrevPage'), document.getElementById('btnNextPage'), document.getElementById('btnTwoPage')];
+    const pageInfoEls = [pageInfo, pageInfoBot];
+    const bottomBar = document.getElementById('viewerBottombar');
+    const zoomControls = [document.getElementById('btnZoomIn'), document.getElementById('btnZoomOut'), zoomLevelEl];
+
+    if (currentFileType === 'pdf') {
+        pageControls.forEach(b => b.style.display = '');
+        pageInfoEls.forEach(e => e.style.display = '');
+        bottomBar.style.display = '';
+        zoomControls.forEach(e => e.style.display = '');
+        openPdfFile(path);
+    } else if (currentFileType === 'image') {
+        pageControls.forEach(b => b.style.display = 'none');
+        pageInfoEls.forEach(e => e.style.display = 'none');
+        bottomBar.style.display = 'none';
+        zoomControls.forEach(e => e.style.display = '');
+        openImageFile(path);
+    } else if (currentFileType === 'ppt') {
+        pageControls.forEach(b => b.style.display = 'none');
+        pageInfoEls.forEach(e => e.style.display = 'none');
+        bottomBar.style.display = 'none';
+        zoomControls.forEach(e => e.style.display = 'none');
+        openPptFile(path, name);
+    }
+}
+
+function hideAllViewers() {
+    pdfCanvas.style.display = 'none';
+    pdfCanvas2.style.display = 'none';
+    document.getElementById('imageViewer').style.display = 'none';
+    document.getElementById('pptViewer').style.display = 'none';
+    document.getElementById('pptFallback').style.display = 'none';
+    pagesWrapper.style.display = 'none';
+    loadingSpinner.classList.remove('visible');
+}
+
+async function openPdfFile(path) {
+    loadingSpinner.classList.add('visible');
+    pagesWrapper.style.display = 'none';
     try {
         const loadingTask = pdfjsLib.getDocument(path);
         pdfDoc = await loadingTask.promise;
@@ -279,6 +410,47 @@ async function openPdf(encodedPath, name) {
             </div>`;
     }
 }
+
+function openImageFile(path) {
+    const img = document.getElementById('imageViewer');
+    img.onload = () => {
+        loadingSpinner.classList.remove('visible');
+        pagesWrapper.style.display = 'flex';
+        img.style.display = 'block';
+        pdfCanvas.style.display = 'none';
+        pdfCanvas2.style.display = 'none';
+    };
+    img.onerror = () => {
+        loadingSpinner.innerHTML = `
+            <div style="color: var(--text-secondary); text-align: center;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                <p style="margin-top: 12px; font-size: 0.9rem; color: #ef4444;">Failed to load image</p>
+            </div>`;
+    };
+    loadingSpinner.classList.add('visible');
+    img.src = path;
+}
+
+function openPptFile(path, name) {
+    const pptViewer = document.getElementById('pptViewer');
+    const pptFallback = document.getElementById('pptFallback');
+
+    if (window.location.protocol === 'file:') {
+        // Local — can't use Google Docs Viewer
+        pptFallback.style.display = 'flex';
+        document.getElementById('pptFallbackName').textContent = name || path.split('/').pop();
+        document.getElementById('btnOpenPpt').onclick = () => downloadPdf(encodeURIComponent(path), name);
+    } else {
+        // Online — use Google Docs Viewer
+        const baseUrl = window.location.href.replace(/\/[^\/]*$/, '/');
+        const fullUrl = new URL(path, baseUrl).href;
+        pptViewer.src = `https://docs.google.com/gview?url=${encodeURIComponent(fullUrl)}&embedded=true`;
+        pptViewer.style.display = 'block';
+    }
+}
+
+// Keep backward compatibility
+function openPdf(encodedPath, name) { openFile(encodedPath, name); }
 
 // ===== HiDPI Canvas Rendering =====
 async function renderPageToCanvas(canvas, pageNum) {
@@ -464,8 +636,11 @@ function goBack() {
     welcomeScreen.style.display = 'flex';
     pdfDoc = null;
     currentPdf = null;
-    loadingSpinner.innerHTML = `<div class="spinner"></div><p>Loading PDF...</p>`;
+    currentFileType = 'pdf';
+    hideAllViewers();
+    loadingSpinner.innerHTML = `<div class="spinner"></div><p>Loading document...</p>`;
     loadingSpinner.classList.remove('visible');
+    document.getElementById('pptViewer').src = '';
     document.querySelectorAll('.file-item').forEach(el => el.classList.remove('active'));
 }
 

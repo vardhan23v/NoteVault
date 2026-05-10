@@ -143,11 +143,22 @@
             <div class="pdf-canvas-container" id="pdfCanvasContainer">
                 <div class="loading-spinner" id="loadingSpinner">
                     <div class="spinner"></div>
-                    <p>Loading PDF...</p>
+                    <p>Loading document...</p>
                 </div>
                 <div class="pages-wrapper" id="pagesWrapper">
                     <canvas id="pdfCanvas"></canvas>
                     <canvas id="pdfCanvas2" style="display:none;"></canvas>
+                    <img id="imageViewer" class="image-viewer" style="display:none;" alt="Document">
+                </div>
+                <iframe id="pptViewer" class="ppt-viewer" style="display:none;" allowfullscreen></iframe>
+                <div class="ppt-fallback" id="pptFallback" style="display:none;">
+                    <div class="fallback-card">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+                        <h3>Presentation File</h3>
+                        <p id="pptFallbackName">file.pptx</p>
+                        <p class="fallback-hint">PPT preview requires an online deployment (GitHub Pages).</p>
+                        <button class="fallback-btn" id="btnOpenPpt">Download &amp; Open Externally</button>
+                    </div>
                 </div>
             </div>
 
@@ -171,6 +182,6 @@
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
-    <script src="app.js?v=4"></script>
+    <script src="app.js?v=7"></script>
 </body>
 </html>
