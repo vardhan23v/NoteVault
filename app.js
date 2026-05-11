@@ -24,12 +24,7 @@ const SUBJECTS = [
                     { name: "DAA Unit 3.pdf", path: "DAA/1,2,3 units notes /DAA_unit3.pdf", size: "5.3 MB" }
                 ]
             },
-            {
-                name: "Lab",
-                files: [
-                    { name: "DAA Lab Programs.pdf", path: "DAA/lab/DAA list of programs -Part A+Part B.pdf", size: "641 KB" }
-                ]
-            },
+
             {
                 name: "Slides",
                 files: [
@@ -84,7 +79,8 @@ const SUBJECTS = [
             { name: "Maths Unit 3.pdf", path: "M4/Maths Unit-3(2).pdf", size: "17.1 MB" },
             { name: "Maths Unit 3 (New).pdf", path: "M4/Maths unit 3.pdf", size: "8.5 MB" },
             { name: "MAT Unit 2.pdf", path: "M4/MAT Unit 2.pdf", size: "22.4 MB" },
-            { name: "DocScanner 04-Apr-2026.pdf", path: "M4/DocScanner 04-Apr-2026 09-57 PM.pdf", size: "22.8 MB" },
+            { name: "DocScanner 04-Apr-2026.pdf", path: "M4/DocScanner 04-Apr-2026 09-57 PM.pdf", size: "22.9 MB" },
+            { name: "DocScanner 15-Feb-2026.pdf", path: "M4/DocScanner 15-Feb-2026 06-33 PM.pdf", size: "21.5 MB" },
             { name: "Maths Sem4 Unit 2.pdf", path: "M4/maths_sem4_unit2 E.pdf", size: "32.7 MB" },
             { name: "MSE 1 Handwritten Notes.pdf", path: "M4/mse 1 hand written.pdf", size: "23.7 MB" },
             { name: "MSE 1 Handwritten Notes 2.pdf", path: "M4/mse 1 hand written 2.pdf", size: "23.7 MB" }
