@@ -814,6 +814,11 @@ body {
     color: #f97316 !important;
 }
 
+.file-icon.doc {
+    background: rgba(59, 130, 246, 0.15) !important;
+    color: #3b82f6 !important;
+}
+
 .file-icon.img {
     background: rgba(16, 185, 129, 0.15) !important;
     color: #10b981 !important;

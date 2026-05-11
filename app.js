@@ -52,6 +52,7 @@ const SUBJECTS = [
             { name: "DBMS SQL Basics.pdf", path: "DBMS/DBMS-SQL-BASICS-updated.pdf", size: "1.4 MB" },
             { name: "DBMS MSE2 QB.pdf", path: "DBMS/DBMS_MSE2_QB.pdf", size: "4.5 MB" },
             { name: "Database Systems Guide 2.pdf", path: "DBMS/DatabaseSystems_Guide 2.pdf", size: "456 KB" },
+            { name: "Database Systems Guide.docx", path: "DBMS/DatabaseSystems_Guide.docx", size: "27 KB" },
             { name: "Neat Notes DBMS.pdf", path: "DBMS/Neat notes DBMS.pdf", size: "9.1 MB" },
             { name: "QB Unit 2 Answers.pdf", path: "DBMS/QB_Unit2_Answers.pdf", size: "44 KB" },
             { name: "Relational Model & Algebra.pdf", path: "DBMS/Relational model and Relational Algebra (1).pdf", size: "3.0 MB" },
@@ -81,6 +82,9 @@ const SUBJECTS = [
         files: [
             { name: "4th Sem Math 2025.pdf", path: "M4/4TH SEM MATH 2025.pdf", size: "1.4 MB" },
             { name: "Maths Unit 3.pdf", path: "M4/Maths Unit-3(2).pdf", size: "17.1 MB" },
+            { name: "Maths Unit 3 (New).pdf", path: "M4/Maths unit 3.pdf", size: "8.5 MB" },
+            { name: "MAT Unit 2.pdf", path: "M4/MAT Unit 2.pdf", size: "22.4 MB" },
+            { name: "DocScanner 04-Apr-2026.pdf", path: "M4/DocScanner 04-Apr-2026 09-57 PM.pdf", size: "22.8 MB" },
             { name: "Maths Sem4 Unit 2.pdf", path: "M4/maths_sem4_unit2 E.pdf", size: "32.7 MB" },
             { name: "MSE 1 Handwritten Notes.pdf", path: "M4/mse 1 hand written.pdf", size: "23.7 MB" },
             { name: "MSE 1 Handwritten Notes 2.pdf", path: "M4/mse 1 hand written 2.pdf", size: "23.7 MB" }
@@ -190,12 +194,15 @@ let currentFileType = 'pdf'; // 'pdf', 'ppt', 'image'
 function getFileType(path) {
     const ext = path.split('.').pop().toLowerCase();
     if (ext === 'pdf') return 'pdf';
-    if (['ppt', 'pptx'].includes(ext)) return 'ppt';
+    if (['ppt', 'pptx', 'doc', 'docx'].includes(ext)) return 'ppt';
     if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(ext)) return 'image';
     return 'pdf';
 }
 
 function getFileLabel(path) {
+    const ext = path.split('.').pop().toLowerCase();
+    if (['doc', 'docx'].includes(ext)) return 'DOC';
+    
     const t = getFileType(path);
     if (t === 'ppt') return 'PPT';
     if (t === 'image') return 'IMG';
@@ -203,6 +210,9 @@ function getFileLabel(path) {
 }
 
 function getFileIconClass(path) {
+    const ext = path.split('.').pop().toLowerCase();
+    if (['doc', 'docx'].includes(ext)) return 'doc';
+    
     const t = getFileType(path);
     if (t === 'ppt') return 'ppt';
     if (t === 'image') return 'img';
