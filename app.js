@@ -78,6 +78,7 @@ const SUBJECTS = [
             { name: "4th Sem Math 2025.pdf", path: "M4/4TH SEM MATH 2025.pdf", size: "1.4 MB" },
             { name: "Maths Unit 3.pdf", path: "M4/Maths Unit-3(2).pdf", size: "17.1 MB" },
             { name: "Maths Unit 3 (New).pdf", path: "M4/Maths unit 3.pdf", size: "8.5 MB" },
+            { name: "Maths Unit 3 (FSEC).pdf", path: "M4/Maths unit 3_fsec.pdf", size: "8.5 MB" },
             { name: "MAT Unit 2.pdf", path: "M4/MAT Unit 2.pdf", size: "22.4 MB" },
             { name: "DocScanner 04-Apr-2026.pdf", path: "M4/DocScanner 04-Apr-2026 09-57 PM.pdf", size: "22.9 MB" },
             { name: "DocScanner 15-Feb-2026.pdf", path: "M4/DocScanner 15-Feb-2026 06-33 PM.pdf", size: "21.5 MB" },
