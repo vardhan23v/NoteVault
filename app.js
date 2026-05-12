@@ -65,7 +65,8 @@ const SUBJECTS = [
                     { name: "Ch10 Tree Index.pdf", path: "DBMS/DBMS-UNIT-3/Ch10_Tree_Index.pdf", size: "1.0 MB" },
                     { name: "Ch12 Overview Query Evaluation.pdf", path: "DBMS/DBMS-UNIT-3/Ch12_Overview_Query_Evaluation.pdf", size: "912 KB" },
                     { name: "Ch17 Concurrency Control.pdf", path: "DBMS/DBMS-UNIT-3/Ch17_CC-95.pdf", size: "2.1 MB" },
-                    { name: "Ch16 Transactions.pptx", path: "DBMS/DBMS-UNIT-3/ch16-Transaction.pptx", size: "586 KB" }
+                    { name: "Ch16 Transactions.pptx", path: "DBMS/DBMS-UNIT-3/ch16-Transaction.pptx", size: "586 KB" },
+                    { name: "DBMS Complete Guide.html", path: "DBMS/DBMS-UNIT-3/dbmsunit3.html", size: "105 KB" }
                 ]
             }
         ]
@@ -84,7 +85,8 @@ const SUBJECTS = [
             { name: "DocScanner 15-Feb-2026.pdf", path: "M4/DocScanner 15-Feb-2026 06-33 PM.pdf", size: "21.5 MB" },
             { name: "Maths Sem4 Unit 2.pdf", path: "M4/maths_sem4_unit2 E.pdf", size: "32.7 MB" },
             { name: "MSE 1 Handwritten Notes.pdf", path: "M4/mse 1 hand written.pdf", size: "23.7 MB" },
-            { name: "MSE 1 Handwritten Notes 2.pdf", path: "M4/mse 1 hand written 2.pdf", size: "23.7 MB" }
+            { name: "MSE 1 Handwritten Notes 2.pdf", path: "M4/mse 1 hand written 2.pdf", size: "23.7 MB" },
+            { name: "M4 MCQ Bank.pdf", path: "M4/MCQ MA2005-1.pdf", size: "294 KB" }
         ],
         subcategories: [
             {
@@ -191,7 +193,7 @@ let currentFileType = 'pdf'; // 'pdf', 'ppt', 'image'
 function getFileType(path) {
     const ext = path.split('.').pop().toLowerCase();
     if (ext === 'pdf') return 'pdf';
-    if (['ppt', 'pptx', 'doc', 'docx'].includes(ext)) return 'ppt';
+    if (['ppt', 'pptx', 'doc', 'docx', 'html'].includes(ext)) return 'ppt';
     if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(ext)) return 'image';
     return 'pdf';
 }
