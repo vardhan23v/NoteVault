@@ -237,11 +237,16 @@ const quickSubjects = document.getElementById('quickSubjects');
 
 // ===== Initialize =====
 function init() {
-    buildSidebar();
-    buildQuickSubjects();
-    countPdfs();
-    attachEvents();
-    addMobileToggle();
+    try {
+        buildSidebar();
+        buildQuickSubjects();
+        countPdfs();
+        attachEvents();
+        addMobileToggle();
+        console.log("NoteVault initialized successfully.");
+    } catch (err) {
+        console.error("Initialization failed:", err);
+    }
 }
 
 function countPdfs() {
@@ -715,6 +720,7 @@ function attachEvents() {
     document.getElementById('btnDownload').addEventListener('click', downloadCurrentPdf);
     document.getElementById('btnNextPageBot').addEventListener('click', nextPage);
     document.getElementById('btnPrevPageBot').addEventListener('click', prevPage);
+    document.getElementById('btnShare').addEventListener('click', shareSite);
 
     searchInput.addEventListener('input', (e) => filterFiles(e.target.value));
     sidebarOverlay.addEventListener('click', closeSidebar);
@@ -866,6 +872,33 @@ function animatePageTurn(direction) {
             pagesWrapper.style.animation = '';
         }, 360);
     }, 280);
+}
+
+// ===== Share Site =====
+function shareSite() {
+    const url = window.location.href.split('?')[0].split('#')[0];
+    if (navigator.share) {
+        navigator.share({
+            title: 'NoteVault | 4th Semester Materials',
+            text: 'Check out these 4th semester study materials!',
+            url: url
+        }).catch(err => {
+            copyToClipboard(url);
+        });
+    } else {
+        copyToClipboard(url);
+    }
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('btnShare');
+        const originalContent = btn.innerHTML;
+        btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`;
+        setTimeout(() => { btn.innerHTML = originalContent; }, 2000);
+    }).catch(err => {
+        alert("Link: " + text);
+    });
 }
 
 // ===== Start =====

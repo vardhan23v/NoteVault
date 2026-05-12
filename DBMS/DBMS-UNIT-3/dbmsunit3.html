@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS Complete Guide – Storage, Indexing, Queries & Transactions</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0d0b;--surface:#161410;--surface2:#1e1b16;--surface3:#26221b;
+  --border:#2e2a22;--border2:#3d3830;
+  --text:#e8e2d8;--text2:#b8b0a2;--text3:#7a7268;
+  --gold:#c9962a;--gold2:#f0c050;--gold-dim:#2a1e06;
+  --amber:#e8820a;--amber-dim:#3d2208;
+  --teal:#2ec4b0;--teal-dim:#0d3530;
+  --blue:#4a9fd4;--blue-dim:#0d2535;
+  --green:#5cb85c;--green-dim:#112811;
+  --red:#e05c5c;--red-dim:#2a0e0e;
+  --purple:#9b72d4;--purple-dim:#1e1030;
+  --font-serif:'Literata',Georgia,serif;
+  --font-display:'Fraunces',Georgia,serif;
+  --font-mono:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-serif);font-size:16px;line-height:1.82}
+a{color:var(--gold);text-decoration:none}
+a:hover{color:var(--gold2)}
+header{background:linear-gradient(135deg,#0a0900 0%,#1a1408 50%,#0e1208 100%);border-bottom:1px solid var(--border2);padding:4rem 2rem 3.5rem;text-align:center;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(201,150,42,.07) 0%,transparent 60%),radial-gradient(ellipse at 70% 60%,rgba(78,159,212,.05) 0%,transparent 60%)}
+header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--gold) 30%,var(--amber) 70%,transparent 100%)}
+.hdr-tag{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;position:relative}
+header h1{font-family:var(--font-display);font-size:clamp(1.8rem,5vw,3.6rem);font-weight:900;line-height:1.05;letter-spacing:-.02em;position:relative;margin-bottom:.8rem}
+header h1 em{color:var(--gold2);font-style:normal}
+header p{color:var(--text2);font-size:1rem;max-width:600px;margin:0 auto 2rem;position:relative}
+.toc-grid{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;position:relative}
+.toc-grid a{padding:.3rem .8rem;border-radius:20px;background:rgba(201,150,42,.08);border:1px solid rgba(201,150,42,.2);font-family:var(--font-mono);font-size:.62rem;letter-spacing:.07em;color:var(--text2);transition:all .2s}
+.toc-grid a:hover{background:rgba(201,150,42,.18);color:var(--gold2);border-color:var(--gold)}
+nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav ul{display:flex;list-style:none;min-width:max-content}
+nav a{display:block;padding:.65rem .85rem;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);border-bottom:2px solid transparent;white-space:nowrap;transition:all .18s}
+nav a:hover{color:var(--gold);border-color:var(--gold)}
+main{max-width:940px;margin:0 auto;padding:0 1.5rem 6rem}
+section{margin-top:4.5rem;padding-top:2rem;border-top:1px solid var(--border)}
+section:first-of-type{border-top:none;margin-top:3rem}
+.sec-label{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:.3rem}
+h2{font-family:var(--font-display);font-size:clamp(1.5rem,3.5vw,2.3rem);font-weight:900;line-height:1.1;margin-bottom:.5rem;color:var(--text)}
+.sec-intro{font-size:1rem;color:var(--text2);border-left:3px solid var(--gold-dim);padding-left:1rem;margin-bottom:1.5rem;font-style:italic}
+h3{font-family:var(--font-display);font-size:1.2rem;font-weight:600;color:var(--gold2);margin:2.5rem 0 .6rem;padding-bottom:.3rem;border-bottom:1px solid var(--border)}
+h4{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin:1.8rem 0 .5rem}
+h5{font-family:var(--font-serif);font-size:.95rem;font-weight:600;color:var(--teal);margin:1.2rem 0 .3rem}
+p{margin-bottom:.9rem}
+ul,ol{margin:.5rem 0 .9rem 1.5rem}
+li{margin-bottom:.3rem}
+strong{color:var(--text);font-weight:600}
+code{font-family:var(--font-mono);font-size:.82em;background:var(--surface3);color:var(--teal);padding:.1em .35em;border-radius:3px;border:1px solid var(--border)}
+.box{border-radius:6px;padding:1rem 1.25rem;margin:1.2rem 0;border-left:4px solid}
+.box-analogy{background:rgba(201,150,42,.06);border-color:var(--gold)}
+.box-analogy::before{content:'💡 Analogy';display:block;font-family:var(--font-mono);font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem}
+.box-note{background:var(--blue-dim);border-color:var(--blue)}
+.box-note::before{content:'📘 Key Concept';display:block;font-family:var(--font-mono);font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:.35rem}
+.box-warn{background:var(--amber-dim);border-color:var(--amber)}
+.box-warn::before{content:'⚠️ Important';display:block;font-family:var(--font-mono);font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:.35rem}
+.box-success{background:var(--green-dim);border-color:var(--green)}
+.box-success::before{content:'✅ Rule';display:block;font-family:var(--font-mono);font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:.35rem}
+.box-example{background:var(--teal-dim);border-color:var(--teal)}
+.box-example::before{content:'🔍 Worked Example';display:block;font-family:var(--font-mono);font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:.35rem}
+.box-def{background:var(--purple-dim);border-color:var(--purple)}
+.box-def::before{content:'📖 Definition';display:block;font-family:var(--font-mono);font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);margin-bottom:.35rem}
+.code{background:var(--surface2);color:#ccd6e0;font-family:var(--font-mono);font-size:.78rem;padding:1rem 1.25rem;border-radius:6px;border:1px solid var(--border2);margin:1rem 0;overflow-x:auto;line-height:1.9;white-space:pre}
+.code .cmt{color:#4a5568;font-style:italic}
+.code .kw{color:#9b72d4;font-weight:600}
+.code .val{color:#c9962a}
+.code .op{color:#e8820a;font-weight:600}
+.code .rel{color:#4a9fd4}
+.code .res{color:#5cb85c;font-weight:600}
+.tbl-wrap{overflow-x:auto;margin:1.2rem 0}
+.tbl-cap{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.4rem}
+table{width:100%;border-collapse:collapse;font-size:.8rem;background:var(--surface);border:1px solid var(--border2);border-radius:6px;overflow:hidden}
+th{background:var(--surface3);color:var(--gold);font-family:var(--font-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;padding:.6rem .9rem;text-align:left;border-bottom:1px solid var(--border2)}
+td{padding:.5rem .9rem;border-bottom:1px solid var(--border);font-family:var(--font-mono);font-size:.77rem;vertical-align:top;color:var(--text2)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--surface2)}
+td.good{color:var(--green);font-weight:600}
+td.bad{color:var(--red);font-weight:600}
+td.warn{color:var(--amber);font-weight:600}
+td.hi{color:var(--gold2);font-weight:600}
+.sched{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:1rem 1.25rem;margin:1rem 0;font-family:var(--font-mono);font-size:.79rem;overflow-x:auto;line-height:2}
+.sched .lbl{color:var(--text3);font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:.5rem}
+.t1c{color:#4a9fd4}.t2c{color:#c9962a}.t3c{color:#5cb85c}.t4c{color:#9b72d4}.conf{color:var(--red);font-weight:700}
+.steps{margin:1rem 0}
+.step-row{display:flex;gap:.9rem;margin-bottom:1rem;align-items:flex-start}
+.sbadge{min-width:2rem;height:2rem;background:var(--surface3);border:1px solid var(--border2);color:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.7rem;font-weight:600;flex-shrink:0;margin-top:.15rem}
+.step-row.blue .sbadge{background:var(--blue-dim);border-color:var(--blue);color:var(--blue)}
+.step-row.green .sbadge{background:var(--green-dim);border-color:var(--green);color:var(--green)}
+.step-row.red .sbadge{background:var(--red-dim);border-color:var(--red);color:var(--red)}
+.step-row.purple .sbadge{background:var(--purple-dim);border-color:var(--purple);color:var(--purple)}
+.acid-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:1.2rem 0}
+.acid-card{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:1.1rem;position:relative;overflow:hidden}
+.acid-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.acid-card.a::before{background:var(--blue)}.acid-card.c::before{background:var(--green)}.acid-card.i::before{background:var(--amber)}.acid-card.d::before{background:var(--purple)}
+.acid-letter{font-family:var(--font-display);font-size:3rem;font-weight:900;line-height:1;opacity:.12;position:absolute;right:.8rem;top:.3rem}
+.acid-card.a .acid-letter{color:var(--blue)}.acid-card.c .acid-letter{color:var(--green)}.acid-card.i .acid-letter{color:var(--amber)}.acid-card.d .acid-letter{color:var(--purple)}
+.acid-card h5{margin:0 0 .4rem;font-size:.85rem;position:relative}
+.acid-card.a h5{color:var(--blue)}.acid-card.c h5{color:var(--green)}.acid-card.i h5{color:var(--amber)}.acid-card.d h5{color:var(--purple)}
+.acid-card p{font-size:.82rem;color:var(--text2);margin:0;position:relative}
+.states{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin:1.2rem 0;align-items:center}
+.sbox{padding:.55rem 1rem;border-radius:6px;font-family:var(--font-mono);font-size:.72rem;font-weight:600;text-align:center;border:1.5px solid}
+.s-active{background:var(--blue-dim);border-color:var(--blue);color:var(--blue)}
+.s-partial{background:var(--amber-dim);border-color:var(--amber);color:var(--amber)}
+.s-committed{background:var(--green-dim);border-color:var(--green);color:var(--green)}
+.s-failed{background:var(--red-dim);border-color:var(--red);color:var(--red)}
+.s-aborted{background:var(--purple-dim);border-color:var(--purple);color:var(--purple)}
+.sarrow{color:var(--text3);font-size:.9rem}
+.prop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1.2rem 0}
+.prop-card{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:.9rem 1rem}
+.prop-card h5{font-size:.85rem;color:var(--gold2);margin-bottom:.3rem}
+.prop-card p{font-size:.82rem;color:var(--text2);margin:0}
+footer{text-align:center;padding:2.5rem 1rem;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);border-top:1px solid var(--border);margin-top:5rem}
+hr.div{border:none;height:1px;background:var(--border);margin:1.8rem 0}
+@media(max-width:620px){header{padding:2.5rem 1rem 2rem}h2{font-size:1.4rem}.acid-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-tag">Database Management Systems · Chapters 8 · 9 · 10 · 12 · 16 · 17</div>
+  <h1>Storage, Indexing, Query Evaluation<br>&amp; <em>Transactions</em></h1>
+  <p>A thorough, beginner-friendly deep-dive covering all six chapters — every concept, every algorithm, every worked example explained from scratch.</p>
+  <div class="toc-grid">
+    <a href="#s1">Ch8 · Storage &amp; Indexing Overview</a>
+    <a href="#s2">Ch9 · Disks, Files &amp; Buffer Manager</a>
+    <a href="#s3">Ch10 · B+ Tree Indexes</a>
+    <a href="#s4">Ch12 · Query Evaluation</a>
+    <a href="#s5">Ch16 · Transactions &amp; ACID</a>
+    <a href="#s6">Ch17 · Concurrency Control</a>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#s1">Storage &amp; Indexing</a></li>
+    <li><a href="#s2">Disks &amp; Files</a></li>
+    <li><a href="#s3">B+ Tree Index</a></li>
+    <li><a href="#s4">Query Evaluation</a></li>
+    <li><a href="#s5">Transactions</a></li>
+    <li><a href="#s6">Concurrency Control</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════════
+     CHAPTER 8 — STORAGE AND INDEXING OVERVIEW
+════════════════════════════════════════════════════════ -->
+<section id="s1">
+<div class="sec-label">Chapter 08</div>
+<h2>Overview of Storage and Indexing</h2>
+<p class="sec-intro">Before any query runs, the DBMS must first <em>find</em> the data. This chapter explains how data is physically stored and how indexes make retrieval fast. Think of it as "how does the database know where things are?"</p>
+
+<h3>1.1 — Why Physical Storage Matters</h3>
+<p>A database must store enormous amounts of data — far too much to keep in RAM. This data lives on <strong>external storage</strong> (hard disks, SSDs). The DBMS must constantly move data between disk and main memory.</p>
+
+<div class="box box-analogy">
+Think of a giant library. Your RAM is your desk — you can only work with a few books at a time. The disk is the shelves — unlimited space, but you have to physically walk to fetch a book. The DBMS "buffer manager" is the librarian who fetches books for you and keeps the most useful ones on your desk.
+</div>
+
+<p>Two types of external storage are described:</p>
+<ul>
+  <li><strong>Disks:</strong> Can retrieve any page at a fixed cost (random access). But reading several consecutive pages together is much cheaper than reading them scattered across the disk.</li>
+  <li><strong>Tapes:</strong> Can only read pages sequentially (like rewinding a cassette). Much cheaper, used for archival backup only.</li>
+</ul>
+
+<div class="box box-note">
+A <strong>Record ID (rid)</strong> is a unique physical address of a record — it tells the DBMS exactly which disk page and which slot on that page the record lives on. The rid is sufficient to physically locate any record.
+</div>
+
+<h3>1.2 — Three Alternative File Organizations</h3>
+<p>How do we physically arrange records on disk? There are three main strategies, each ideal for different workloads:</p>
+
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Organization</th><th>How records are arranged</th><th>Best for</th><th>Weakness</th></tr></thead>
+<tbody>
+<tr><td class="hi">Heap File</td><td>Random order — new records added at end of file</td><td>Full file scans (fetch all records)</td><td>Slow for searching specific records</td></tr>
+<tr><td class="hi">Sorted File</td><td>Records sorted by the value of some field(s)</td><td>Range queries; ordered retrieval</td><td>Inserts/deletes are very expensive (must maintain order)</td></tr>
+<tr><td class="hi">Index</td><td>A separate data structure that maps key values → record locations</td><td>Fast lookup by specific key value</td><td>Adds storage overhead; updates also update the index</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>1.3 — What is an Index?</h3>
+<p>An <strong>index</strong> is a separate data structure that allows the DBMS to quickly find records matching certain field values — without scanning the entire file.</p>
+
+<div class="box box-analogy">
+An index is exactly like the index at the back of a textbook. Instead of reading every page to find "B+ tree", you look it up alphabetically in the index and it tells you "page 247". The DBMS does the same thing: instead of scanning all records for employees in department 5, it uses an index on the Department field.
+</div>
+
+<ul>
+  <li>The field(s) used to look up records in an index is called the <strong>search key</strong>.</li>
+  <li>The search key is <em>not</em> the same as a primary key — it can be any subset of fields.</li>
+  <li>Multiple indexes can be built on the same file with different search keys.</li>
+</ul>
+
+<h3>1.4 — Three Alternatives for Data Entries in an Index</h3>
+<p>When you look up a key in an index, what does each index entry actually contain? There are three choices:</p>
+
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Alternative</th><th>What the index stores</th><th>Pros</th><th>Cons</th></tr></thead>
+<tbody>
+<tr>
+  <td class="hi">Alt 1</td>
+  <td>The actual full data record itself (key + all fields)</td>
+  <td>One lookup gets everything — no second fetch needed</td>
+  <td>Only ONE index per file can use this. If two indexes used Alt 1, data would be duplicated and could become inconsistent. Large data records = large index.</td>
+</tr>
+<tr>
+  <td class="hi">Alt 2</td>
+  <td>&lt;key value, rid of ONE matching record&gt;</td>
+  <td>Entries much smaller than full records. Many indexes can coexist on one file.</td>
+  <td>Requires a second disk access to fetch the actual record after finding the rid.</td>
+</tr>
+<tr>
+  <td class="hi">Alt 3</td>
+  <td>&lt;key value, LIST of rids of all matching records&gt;</td>
+  <td>Most compact when many records share the same key value.</td>
+  <td>Variable-length entries (list can be long), which complicates storage management.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="box box-note">
+The choice of Alternative 1/2/3 is <strong>independent</strong> of whether you use a B+ tree or a hash as the index structure. You can have a B+ tree using Alt 2, or a hash using Alt 3, etc.
+</div>
+
+<h3>1.5 — Index Classification: Four Key Distinctions</h3>
+
+<h4>1. Primary vs Secondary Index</h4>
+<ul>
+  <li><strong>Primary index:</strong> The search key <em>contains</em> the primary key of the relation. There can only be one.</li>
+  <li><strong>Secondary index:</strong> Any other index. A table can have many secondary indexes.</li>
+  <li><strong>Unique index:</strong> The search key contains a candidate key (all values are distinct).</li>
+</ul>
+
+<h4>2. Clustered vs Unclustered Index</h4>
+<p>This is the most important distinction and has a massive impact on performance.</p>
+
+<div class="box box-def">
+A <strong>clustered index</strong> means the physical order of records on disk matches (or is close to) the logical order defined by the index search key. Only ONE clustered index is possible per file.
+<br><br>An <strong>unclustered index</strong> means the physical order of records on disk has nothing to do with the order of the index.
+</div>
+
+<p>Visualization from the textbook — imagine data records scattered in a heap file, and index entries sorted by search key:</p>
+<ul>
+  <li><strong>Clustered:</strong> The arrows from index entries to data records all point to records that are nearby on disk (low seek cost).</li>
+  <li><strong>Unclustered:</strong> The arrows jump all over the disk — each record may require a separate I/O.</li>
+</ul>
+
+<div class="box box-warn">
+For a range query returning 1,000 matching records:<br>
+• Clustered index: ~10 disk pages (records are together) → very fast<br>
+• Unclustered index: up to 1,000 disk pages (one per record, scattered) → potentially 100× slower!
+</div>
+
+<h4>3. Dense vs Sparse Index</h4>
+<ul>
+  <li><strong>Dense index:</strong> One index entry per data record. Can answer queries without accessing the data file.</li>
+  <li><strong>Sparse index:</strong> One index entry per page of data records. Smaller index, but can only be used with clustered data (since you need to scan within a page after finding it).</li>
+</ul>
+
+<h4>4. B+ Tree vs Hash-Based Indexes</h4>
+<ul>
+  <li><strong>Hash index:</strong> Uses a hash function to map key values to buckets. Very fast for equality searches (find exactly one value). Useless for range queries.</li>
+  <li><strong>B+ Tree index:</strong> A balanced tree structure. Good for both equality and range searches. The most widely used index type.</li>
+</ul>
+
+<div class="box box-success">
+<strong>Rule of thumb:</strong> Exact match query (age = 25)? Use hash. Range query (age BETWEEN 20 AND 30) or sorting? Use B+ tree.
+</div>
+
+<h3>1.6 — Cost Model for Comparing File Organizations</h3>
+<p>To compare different organizations, we use a simple cost model based on disk I/O (we ignore CPU costs since disk I/O dominates):</p>
+<ul>
+  <li><strong>B</strong> = number of data pages in the file</li>
+  <li><strong>R</strong> = number of records per page</li>
+  <li><strong>D</strong> = average time to read or write one disk page</li>
+  <li><strong>F</strong> = fanout of B+ tree (number of entries per index page, typically 133)</li>
+</ul>
+
+<h4>The 5 Operations and Their Costs</h4>
+<div class="tbl-wrap">
+<p class="tbl-cap">Cost estimates for 5 file organizations × 5 operations</p>
+<table>
+<thead>
+<tr><th>Organization</th><th>(a) Scan all</th><th>(b) Equality search</th><th>(c) Range search</th><th>(d) Insert</th><th>(e) Delete</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td class="hi">1 · Heap file</td><td>BD</td><td>0.5BD</td><td>BD</td><td>2D</td><td>Search + D</td>
+</tr>
+<tr>
+  <td class="hi">2 · Sorted file</td><td>BD</td><td>D·log₂B</td><td>D·log₂B + #matches</td><td>Search + BD</td><td>Search + BD</td>
+</tr>
+<tr>
+  <td class="hi">3 · Clustered B+ tree</td><td>1.5BD</td><td class="good">D·log_F(1.5B)</td><td class="good">D·log_F(1.5B) + #matches</td><td class="good">Search + D</td><td class="good">Search + D</td>
+</tr>
+<tr>
+  <td class="hi">4 · Unclustered B+ tree</td><td>BD(R+0.15)</td><td>D(1+log_F(0.15B))</td><td class="warn">D·log_F(0.15B) + #matches</td><td>D(3+log_F(0.15B))</td><td>Search + 2D</td>
+</tr>
+<tr>
+  <td class="hi">5 · Unclustered Hash</td><td>BD(R+0.125)</td><td class="good">2D</td><td class="bad">BD (no support!)</td><td>4D</td><td>Search + 2D</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="box box-example">
+<strong>Why does sorted file have such expensive inserts?</strong> To maintain sorted order, you might need to shift all records after the insertion point — potentially moving O(B) pages. That's why sorted files are rarely used in practice; B+ trees give almost the same search benefits with much cheaper inserts.
+<br><br>
+<strong>Why does unclustered B+ tree range search cost BD(R + 0.15)?</strong> For each matching record, you need a separate random I/O. If 10% of records match (0.15B index pages), you might do up to R × 0.15B = 0.15BR random reads, where each could require fetching a separate page.
+</div>
+
+<h3>1.7 — How to Choose Indexes (Index Selection Guidelines)</h3>
+<p>Creating the right indexes is a critical design decision. Here are the key guidelines:</p>
+
+<div class="steps">
+<div class="step-row">
+  <div class="sbadge">1</div>
+  <div><strong>Attributes in WHERE clauses are candidates for index keys.</strong> If queries frequently filter on <code>age</code> or <code>salary</code>, those fields should be indexed.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">2</div>
+  <div><strong>Exact match → hash index. Range query → tree index.</strong> <code>WHERE age = 25</code> works perfectly with hash. <code>WHERE age BETWEEN 20 AND 30</code> needs a B+ tree.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">3</div>
+  <div><strong>Clustering is especially valuable for range queries.</strong> Since only one index can be clustered per table, choose the one that benefits the most important/frequent range queries.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">4</div>
+  <div><strong>Consider composite (multi-attribute) indexes for multi-condition WHERE clauses.</strong> <code>WHERE age = 30 AND salary &gt; 50000</code> benefits from a composite index on &lt;age, sal&gt;.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">5</div>
+  <div><strong>Order matters in composite indexes.</strong> Index on &lt;age, sal&gt; helps queries that filter on age (or age + sal). But it does NOT help queries that filter only on sal.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">6</div>
+  <div><strong>Consider index-only strategies.</strong> If all columns needed by a query are in the index, the DBMS never touches the actual data file.</div>
+</div>
+</div>
+
+<h3>1.8 — Composite Search Keys in Depth</h3>
+<p>Consider employees with fields: name, age, sal. We want to support queries on combinations of age and salary.</p>
+
+<div class="box box-example">
+<strong>Data entries in an index on &lt;sal, age&gt; (sorted by sal first, then age):</strong><br><br>
+Records: sue(age=13,sal=75), bob(age=12,sal=10), cal(age=11,sal=80), joe(age=20,sal=12)<br><br>
+<code>&lt;sal, age&gt; index entries: (10,12), (12,20), (75,13), (80,11)</code> — sorted by sal first<br>
+<code>&lt;age, sal&gt; index entries: (11,80), (12,10), (13,75), (20,12)</code> — sorted by age first<br><br>
+<strong>Query: age=20 AND sal=75</strong><br>
+→ A composite &lt;age,sal&gt; index finds this instantly. Individual age or sal indexes would need more work.<br><br>
+<strong>Query: age=20 AND sal &gt; 10</strong><br>
+→ Clustered &lt;age,sal&gt; tree is best: go to age=20 entries, then scan forward while sal &gt; 10.<br><br>
+<strong>Query: age=30 AND 3000 &lt; sal &lt; 5000</strong><br>
+→ &lt;age,sal&gt; is much better than &lt;sal,age&gt;. With &lt;age,sal&gt; you find age=30 entries and scan the sal range. With &lt;sal,age&gt; the sal range is spread across different "age" groups — not consecutive.
+</div>
+
+<h3>1.9 — Index-Only Plans</h3>
+<p>Sometimes a query can be answered entirely from the index, without touching the actual data pages at all. This is extremely fast.</p>
+
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Query</th><th>Index needed for index-only plan</th></tr></thead>
+<tbody>
+<tr><td><code>SELECT E.dno FROM Emp E GROUP BY E.dno</code></td><td>&lt;E.dno&gt; (any index on dno)</td></tr>
+<tr><td><code>SELECT E.dno, MIN(E.sal) FROM Emp E GROUP BY E.dno</code></td><td>Tree index on &lt;E.dno, E.sal&gt;</td></tr>
+<tr><td><code>SELECT AVG(E.sal) FROM Emp WHERE E.age=25 AND E.sal BETWEEN 3000 AND 5000</code></td><td>Tree index on &lt;E.age, E.sal&gt; OR &lt;E.sal, E.age&gt;</td></tr>
+<tr><td><code>SELECT D.mgr FROM Dept D, Emp E WHERE D.dno=E.dno</code></td><td>Index on &lt;E.dno&gt; (only dno needed from Emp side)</td></tr>
+</tbody>
+</table>
+</div>
+<p>For index-only plans, <strong>clustering doesn't matter</strong> — you never fetch data pages, so their physical order is irrelevant.</p>
+
+<div class="box box-warn">
+<strong>Trade-off to remember:</strong> Every index speeds up queries but slows down inserts/deletes/updates (because the index must also be updated). Also, indexes use disk space. Don't create indexes you don't need.
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     CHAPTER 9 — DISKS AND FILES
+════════════════════════════════════════════════════════ -->
+<section id="s2">
+<div class="sec-label">Chapter 09</div>
+<h2>Storing Data: Disks and Files</h2>
+<p class="sec-intro">Before we can index or query data, we need to understand <em>how</em> data is physically stored on disk and how the DBMS manages moving it into memory. This chapter is the foundation of all database performance.</p>
+
+<h3>2.1 — Why Not Just Use RAM?</h3>
+<p>Two reasons we can't keep everything in main memory:</p>
+<ul>
+  <li><strong>Cost:</strong> RAM is expensive. At the time the textbook was written: $1000 buys 128 MB of RAM OR 7.5 GB of disk. Even today, RAM costs orders of magnitude more per GB than disk.</li>
+  <li><strong>Volatility:</strong> RAM is wiped when power is lost. Databases must persist data across shutdowns, crashes, and failures.</li>
+</ul>
+
+<div class="box box-note">
+<strong>Storage Hierarchy:</strong><br>
+1. <strong>Main memory (RAM)</strong> — for currently active data. Fast, expensive, volatile.<br>
+2. <strong>Disk (secondary storage)</strong> — for the main database. Slow, cheap, persistent.<br>
+3. <strong>Tapes (tertiary storage)</strong> — for archiving old data. Cheapest, sequential access only.
+</div>
+
+<h3>2.2 — How a Hard Disk Works</h3>
+<p>Understanding disk mechanics is essential because they determine why I/O is slow.</p>
+
+<div class="box box-def">
+A hard disk consists of:<br>
+• <strong>Platters</strong> — circular disks that spin on a central spindle (e.g., 90 rotations per second)<br>
+• <strong>Tracks</strong> — concentric circles on each platter surface where data is written<br>
+• <strong>Sectors</strong> — fixed-size subdivisions of a track (the smallest physical unit)<br>
+• <strong>Disk heads</strong> — read/write heads that hover over the spinning platters<br>
+• <strong>Arm assembly</strong> — moves the heads in/out to position them on different tracks<br>
+• <strong>Cylinder</strong> — all tracks at the same arm position across all platters (an imaginary column)
+</div>
+
+<h4>How Long Does a Disk Access Take?</h4>
+<p>Reading or writing one block of data requires three sequential steps, each taking time:</p>
+
+<div class="steps">
+<div class="step-row blue">
+  <div class="sbadge">1</div>
+  <div><strong>Seek time:</strong> Move the arm to position the head over the correct track. Varies from 1ms to 20ms depending on how far the arm must move. This is usually the dominant cost.</div>
+</div>
+<div class="step-row blue">
+  <div class="sbadge">2</div>
+  <div><strong>Rotational delay:</strong> Wait for the disk to rotate until the desired block is under the head. Ranges from 0 to 10ms (on average ~5ms at 6000 rpm).</div>
+</div>
+<div class="step-row blue">
+  <div class="sbadge">3</div>
+  <div><strong>Transfer time:</strong> Actually move the bits from the magnetic surface to the controller. About 1ms per 4KB page. Relatively fast.</div>
+</div>
+</div>
+
+<p><strong>Total typical access time: 5–20ms per page</strong>. Compare this to RAM access at ~100 nanoseconds — disk I/O is roughly <strong>100,000× slower</strong> than RAM access.</p>
+
+<div class="box box-warn">
+Seek time and rotational delay dominate the cost. Minimizing I/Os and keeping related data on the same track/cylinder is critical. This is why the order of pages on disk matters enormously for database performance.
+</div>
+
+<h4>Sequential vs Random I/O</h4>
+<p>The key insight: reading pages sequentially (next page on same track, then same cylinder, then adjacent cylinder) is much faster than random I/O because you avoid repeated seek and rotation costs.</p>
+<ul>
+  <li><strong>Sequential scan:</strong> Pre-fetch multiple pages at once — very efficient.</li>
+  <li><strong>Random access:</strong> Every access pays full seek + rotation cost — expensive.</li>
+</ul>
+<p>This is why <strong>clustered indexes</strong> are so much faster for range queries than unclustered ones — a clustered index results in sequential reads.</p>
+
+<h3>2.3 — RAID: Making Disks Reliable and Fast</h3>
+<p>A single disk can fail. RAID (Redundant Array of Independent Disks) distributes data across multiple disks to improve <strong>performance</strong> and <strong>reliability</strong>.</p>
+
+<p>Two core techniques:</p>
+<ul>
+  <li><strong>Data striping:</strong> Split data into chunks (stripe units) and spread them across multiple disks. Multiple disks can be read in parallel — faster throughput.</li>
+  <li><strong>Redundancy:</strong> Store extra information so data can be reconstructed if one disk fails.</li>
+</ul>
+
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>RAID Level</th><th>Mechanism</th><th>Reliability</th><th>Performance</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td class="hi">Level 0</td><td>Striping only, no redundancy</td><td class="bad">None</td><td class="good">Best (parallel reads)</td><td>Any disk failure = total data loss</td></tr>
+<tr><td class="hi">Level 1</td><td>Mirroring — exact copy on second disk</td><td class="good">High</td><td class="warn">Parallel reads; writes hit 2 disks</td><td>50% storage overhead</td></tr>
+<tr><td class="hi">Level 0+1</td><td>Striping + Mirroring combined</td><td class="good">High</td><td class="good">Full aggregate bandwidth for reads</td><td>Most expensive</td></tr>
+<tr><td class="hi">Level 3</td><td>Bit-interleaved parity; 1 check disk</td><td class="warn">Moderate</td><td class="warn">1 request at a time (all disks involved)</td><td>Simple, older</td></tr>
+<tr><td class="hi">Level 4</td><td>Block-interleaved parity; 1 check disk</td><td class="warn">Moderate</td><td class="warn">Small reads parallel; writes bottleneck on check disk</td><td>Check disk is bottleneck</td></tr>
+<tr><td class="hi">Level 5</td><td>Block-interleaved distributed parity</td><td class="good">High</td><td class="good">Parity spread across all disks — no bottleneck</td><td>Most popular for databases</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>2.4 — Disk Space Management</h3>
+<p>The <strong>lowest layer</strong> of the DBMS software is the disk space manager. It provides a simple abstraction to higher layers:</p>
+<ul>
+  <li>Allocate a new page</li>
+  <li>Deallocate (free) a page</li>
+  <li>Read a page from disk into memory</li>
+  <li>Write a page from memory to disk</li>
+</ul>
+<div class="box box-success">
+When a higher layer requests a sequence of pages, the disk space manager must allocate them <strong>sequentially on disk</strong>. This ensures efficient sequential I/O for scans.
+</div>
+
+<h3>2.5 — The Buffer Manager</h3>
+<p>The DBMS cannot work on data that's on disk — it must bring it into RAM first. The <strong>buffer manager</strong> is the component responsible for this.</p>
+
+<div class="box box-def">
+The <strong>buffer pool</strong> is a region of main memory divided into fixed-size <strong>frames</strong>. Each frame can hold one disk page. The buffer manager maintains a table of &lt;frame#, pageID&gt; pairs so it knows which disk page is currently in which frame.
+</div>
+
+<h4>What Happens When a Page is Requested?</h4>
+<div class="steps">
+<div class="step-row">
+  <div class="sbadge">1</div>
+  <div><strong>Check buffer pool:</strong> Is the requested page already in a frame? If yes, just return its address — no disk I/O needed!</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">2</div>
+  <div><strong>Choose a victim frame:</strong> If the page is not in the pool, pick a frame to replace using the replacement policy.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">3</div>
+  <div><strong>Write dirty page if necessary:</strong> If the chosen frame contains a page that was modified (<em>dirty bit = 1</em>), write it back to disk before evicting it.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">4</div>
+  <div><strong>Read in the new page:</strong> Load the requested page from disk into the chosen frame.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">5</div>
+  <div><strong>Pin and return:</strong> Increment the page's <em>pin count</em> (prevents it from being evicted while in use) and return the frame address to the requester.</div>
+</div>
+</div>
+
+<h4>Pin Count and Dirty Bit</h4>
+<ul>
+  <li><strong>Pin count:</strong> Counts how many threads/queries are currently using this page. A page can only be evicted when pin count = 0 (nobody is using it).</li>
+  <li><strong>Dirty bit:</strong> Set to 1 when a page has been modified in memory but not yet written to disk. Ensures changes aren't lost.</li>
+</ul>
+
+<h4>Buffer Replacement Policies</h4>
+<p>When all frames are occupied (pinned or recently used), which page should be evicted to make room?</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Policy</th><th>Strategy</th><th>Best for</th><th>Weakness</th></tr></thead>
+<tbody>
+<tr><td class="hi">LRU (Least Recently Used)</td><td>Evict the page that was accessed least recently</td><td>Most general workloads</td><td>Sequential flooding (see below)</td></tr>
+<tr><td class="hi">MRU (Most Recently Used)</td><td>Evict the most recently used page</td><td>Repeated sequential scans</td><td>Bad for general workloads</td></tr>
+<tr><td class="hi">Clock</td><td>Approximation of LRU with a reference bit and a "clock hand"</td><td>General use, efficient</td><td>Still vulnerable to sequential flooding</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box box-warn">
+<strong>Sequential flooding:</strong> Suppose you have 10 buffer frames and scan a file with 100 pages, over and over. With LRU: each page request causes an I/O because the oldest page (which you'll need next) keeps getting evicted. You get 100 I/Os per scan. With MRU: after the first scan, later scans can reuse pages. MRU is much better here!
+</div>
+
+<h4>Why Not Just Use the OS File System?</h4>
+<p>The OS manages files and buffers too — so why does the DBMS need its own buffer manager?</p>
+<ul>
+  <li>OS can't <strong>pin</strong> a page (keep it guaranteed in RAM).</li>
+  <li>OS can't <strong>force a page to disk</strong> at a specific time (needed for crash recovery: Write-Ahead Logging).</li>
+  <li>OS doesn't support <strong>pre-fetching</strong> based on the access patterns the DBMS knows about.</li>
+  <li>Some OS filesystems can't span multiple physical disks.</li>
+  <li>OS file buffer replacement policy may not match the DBMS's needs.</li>
+</ul>
+
+<h3>2.6 — Record Formats</h3>
+<p>Records (rows) can be stored in two formats on a page:</p>
+
+<h4>Fixed-Length Records</h4>
+<p>All fields have the same size for every record (e.g., integers are always 4 bytes). Finding the i-th field requires a simple arithmetic calculation: <code>Address = Base + L1 + L2 + ... + L(i-1)</code>. Simple and efficient.</p>
+
+<h4>Variable-Length Records</h4>
+<p>Fields can vary in length (e.g., VARCHAR). Two approaches:</p>
+<ul>
+  <li><strong>Delimited fields:</strong> Use a special separator character between fields. Simple but finding the i-th field requires scanning from the start.</li>
+  <li><strong>Field offset directory:</strong> Store an array of offsets at the start of each record pointing to where each field begins. Allows direct (O(1)) access to any field, and efficiently handles nulls (null fields can be stored compactly).</li>
+</ul>
+<p>The field offset directory approach is preferred in modern systems because it's faster.</p>
+
+<h3>2.7 — Page Formats</h3>
+<p>Multiple records are stored together in a disk page. How are they organized within the page?</p>
+
+<h4>Fixed-Length Records on a Page</h4>
+<p>Two options:</p>
+<ul>
+  <li><strong>Packed format:</strong> Records fill contiguous slots. Simple, but deleting a record leaves a gap — you must either compact or track gaps. Moving records changes their rid.</li>
+  <li><strong>Unpacked format with bitmap:</strong> Keep a bitmap at the start of the page. Each bit indicates whether the corresponding slot is occupied. A deleted slot is just marked free in the bitmap. No compaction needed.</li>
+</ul>
+
+<h4>Variable-Length Records on a Page (Slot Directory)</h4>
+<p>This is the preferred format because it's flexible and allows records to move without changing their external rid.</p>
+
+<div class="box box-def">
+The <strong>slot directory</strong> is stored at the end (or start) of each page. It contains:<br>
+• Number of slots<br>
+• A pointer to the start of free space<br>
+• For each slot: offset where the record starts within the page<br><br>
+Record ID = &lt;page_id, slot_number&gt;. If a record moves to a different position within the same page (for compaction), only the slot directory needs updating — the external rid (page, slot) remains unchanged.
+</div>
+
+<h3>2.8 — Heap File Implementations</h3>
+<p>The simplest file type is the <strong>heap file</strong> — records in no particular order. The DBMS needs to track which pages are in the file and which have free space.</p>
+
+<h4>Option 1: Doubly Linked List</h4>
+<p>Two linked lists: one for full pages, one for pages with free space. The header page holds pointers to the heads of both lists. Each page stores two pointers (prev/next) plus data.</p>
+
+<h4>Option 2: Page Directory (Better)</h4>
+<p>A collection of "directory" pages. Each directory entry records: a pointer to a data page + how many free bytes are on that page. The directory itself is a much smaller structure than the full linked list.</p>
+
+<div class="box box-success">
+The Page Directory approach is far more efficient than the linked list for finding a page with enough free space for a new record. Instead of traversing a long list, you scan the compact directory.
+</div>
+
+<h3>2.9 — System Catalogs</h3>
+<p>The DBMS maintains <strong>catalog relations</strong> — metadata about all database objects. These are themselves stored as regular database relations!</p>
+<ul>
+  <li><strong>For each relation:</strong> name, file name, file structure (heap/sorted), attribute names and types, index names, integrity constraints</li>
+  <li><strong>For each index:</strong> structure (B+ tree, hash), search key fields</li>
+  <li><strong>For each view:</strong> view name, view definition</li>
+  <li>Plus statistics (number of tuples, number of pages, etc.), authorization info, buffer pool size</li>
+</ul>
+
+<div class="box box-example">
+The <code>Attr_Cat</code> relation stores attribute information:<br><br>
+<code>Attr_Cat(attr_name, rel_name, type, position)</code><br><br>
+Example rows:<br>
+<code>(sid, Students, string, 1)</code><br>
+<code>(name, Students, string, 2)</code><br>
+<code>(gpa, Students, real, 5)</code><br>
+<code>(sal, Faculty, real, 3)</code><br><br>
+When you run <code>SELECT name FROM Students WHERE gpa > 3.0</code>, the query optimizer reads Attr_Cat to understand the Students schema before building an execution plan.
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     CHAPTER 10 — B+ TREE INDEXES
+════════════════════════════════════════════════════════ -->
+<section id="s3">
+<div class="sec-label">Chapter 10</div>
+<h2>Tree-Structured Indexes (B+ Trees)</h2>
+<p class="sec-intro">The B+ tree is the most widely used index structure in database systems — almost every commercial DBMS uses it. It handles both equality and range searches efficiently, and adjusts gracefully when data is inserted or deleted.</p>
+
+<h3>3.1 — The Problem: Why Not Just Sort the File?</h3>
+<p>Suppose we want to find all students with GPA > 3.0. If the data file is sorted by GPA, we can do binary search — but this still requires <code>log₂(N)</code> page reads, which gets expensive when N is large.</p>
+
+<p><strong>Idea:</strong> Create a smaller "index file" that just contains key values and pointers to pages. Then do binary search on the smaller index file, and finally read just the data pages you need.</p>
+
+<p>But the index file itself might be large. So we can apply the idea <em>recursively</em> — create an index of the index! This is the motivation for tree-structured indexes.</p>
+
+<h3>3.2 — ISAM: The Static Predecessor to B+ Trees</h3>
+<p>Before B+ trees, databases used <strong>ISAM</strong> (Indexed Sequential Access Method).</p>
+
+<div class="box box-def">
+An <strong>ISAM tree</strong> is a static, multi-level index. Leaf pages contain the actual data entries. Non-leaf (index) pages contain &lt;search key, pointer to child page&gt; pairs that direct searches down to the correct leaf.<br><br>
+The structure is fixed at creation time. Inserts and deletes only affect leaf pages (via overflow pages). The non-leaf structure never changes.
+</div>
+
+<h4>ISAM Example</h4>
+<div class="tree-diagram" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:1.5rem;margin:1rem 0;font-family:var(--font-mono);font-size:.77rem;overflow-x:auto">
+<div style="color:var(--text3);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem">ISAM Tree — each node holds 2 entries</div>
+<div style="display:flex;justify-content:center;margin-bottom:.3rem">
+  <span style="padding:.35rem .8rem;background:var(--amber-dim);border:1px solid var(--amber);border-radius:4px;color:var(--gold2);font-weight:700">Root: 40</span>
+</div>
+<div style="color:var(--text3);text-align:center">↙&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↘</div>
+<div style="display:flex;justify-content:center;gap:5rem;margin-bottom:.3rem">
+  <span style="padding:.3rem .7rem;background:var(--blue-dim);border:1px solid var(--blue);border-radius:4px;color:var(--blue)">20 | 33</span>
+  <span style="padding:.3rem .7rem;background:var(--blue-dim);border:1px solid var(--blue);border-radius:4px;color:var(--blue)">51 | 63</span>
+</div>
+<div style="color:var(--text3);text-align:center;font-size:.7rem;letter-spacing:.05em">↓ ↓ ↓ ↓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ ↓ ↓ ↓</div>
+<div style="display:flex;justify-content:center;gap:.3rem;flex-wrap:wrap;margin-top:.3rem">
+  <span style="padding:.25rem .5rem;background:var(--teal-dim);border:1px solid var(--teal);border-radius:3px;color:var(--teal);font-size:.72rem">10*15*</span>
+  <span style="padding:.25rem .5rem;background:var(--teal-dim);border:1px solid var(--teal);border-radius:3px;color:var(--teal);font-size:.72rem">20*27*</span>
+  <span style="padding:.25rem .5rem;background:var(--teal-dim);border:1px solid var(--teal);border-radius:3px;color:var(--teal);font-size:.72rem">33*37*</span>
+  <span style="padding:.25rem .5rem;background:var(--teal-dim);border:1px solid var(--teal);border-radius:3px;color:var(--teal);font-size:.72rem">40*46*</span>
+  <span style="padding:.25rem .5rem;background:var(--teal-dim);border:1px solid var(--teal);border-radius:3px;color:var(--teal);font-size:.72rem">51*55*</span>
+  <span style="padding:.25rem .5rem;background:var(--teal-dim);border:1px solid var(--teal);border-radius:3px;color:var(--teal);font-size:.72rem">63*97*</span>
+</div>
+<div style="color:var(--text3);font-size:.65rem;margin-top:.6rem">* = actual data entries (records)</div>
+</div>
+
+<h4>ISAM Problem: Overflow Chains</h4>
+<p>After inserting 23*, 48*, 41*, 42*: the leaf pages fill up and overflow pages must be chained. If many inserts happen, chains become long and slow to search. Deletions can also leave empty overflow pages that waste space. ISAM degrades over time with updates.</p>
+
+<div class="box box-warn">
+ISAM's fatal flaw: it's <strong>static</strong>. Once built, the non-leaf structure never changes. Heavy insert activity creates long overflow chains that kill performance. This led to the invention of the dynamic B+ tree.
+</div>
+
+<h3>3.3 — B+ Tree: The Dynamic Solution</h3>
+<p>The B+ tree solves ISAM's problems by <strong>dynamically reorganizing itself</strong> when data is inserted or deleted.</p>
+
+<div class="box box-def">
+A <strong>B+ tree of order d</strong> is a balanced tree where:<br><br>
+• <strong>Leaf pages</strong> contain the actual data entries, and are doubly linked (prev/next pointers) for sequential range scans.<br>
+• <strong>Non-leaf (index) pages</strong> contain key values and child pointers to guide searches.<br>
+• Every non-root node has between <strong>d</strong> and <strong>2d</strong> entries (at least 50% full).<br>
+• The root can have as few as 1 entry.<br>
+• All leaf pages are at the same depth — the tree is always <strong>height-balanced</strong>.<br>
+• <strong>Cost to search:</strong> O(log_F N) where F = fanout (entries per page), N = number of leaf pages.
+</div>
+
+<h4>B+ Tree Structure Diagram</h4>
+<div class="tree-diagram" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:1.5rem;margin:1rem 0;font-family:var(--font-mono);font-size:.77rem;overflow-x:auto">
+<div style="color:var(--text3);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem">B+ Tree Example (from textbook)</div>
+<div style="display:flex;justify-content:center;margin-bottom:.2rem">
+  <span style="padding:.35rem .9rem;background:var(--amber-dim);border:1px solid var(--amber);border-radius:4px;color:var(--gold2);font-weight:700">Root: 13</span>
+</div>
+<div style="color:var(--text3);text-align:center;font-size:.9rem">↙&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↘</div>
+<div style="display:flex;justify-content:center;gap:4rem;margin-bottom:.2rem">
+  <span style="padding:.3rem .7rem;background:var(--blue-dim);border:1px solid var(--blue);border-radius:4px;color:var(--blue)">5</span>
+  <span style="padding:.3rem .7rem;background:var(--blue-dim);border:1px solid var(--blue);border-radius:4px;color:var(--blue)">17 | 24 | 30</span>
+</div>
+<div style="color:var(--text3);text-align:center;font-size:.7rem">↓ ↓ ↓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ ↓ ↓ ↓ ↓</div>
+<div style="display:flex;justify-content:center;gap:.25rem;flex-wrap:wrap;margin-top:.2rem">
+  <span style="padding:.25rem .5rem;background:var(--teal-dim);border:1px solid var(--teal);border-radius:3px;color:var(--teal);font-size:.7rem">2* 3*</span>
+  <span style="padding:.25rem .5rem;background:var(--teal-dim);border:1px solid var(--teal);border-radius:3px;color:var(--teal);font-size:.7rem">5* 7*</span>
+  <span style="padding:.25rem .5rem;background:var(--teal-dim);border:1px solid var(--teal);border-radius:3px;color:var(--teal);font-size:.7rem">14* 16*</span>
+  <span style="padding:.25rem .5rem;background:var(--teal-dim);border:1px solid var(--teal);border-radius:3px;color:var(--teal);font-size:.7rem">19* 20* 22*</span>
+  <span style="padding:.25rem .5rem;background:var(--teal-dim);border:1px solid var(--teal);border-radius:3px;color:var(--teal);font-size:.7rem">24* 27* 29*</span>
+  <span style="padding:.25rem .5rem;background:var(--teal-dim);border:1px solid var(--teal);border-radius:3px;color:var(--teal);font-size:.7rem">33* 34* 38* 39*</span>
+</div>
+<div style="color:var(--text3);font-size:.65rem;margin-top:.5rem">← leaf pages linked left-to-right →</div>
+</div>
+
+<h4>B+ Trees in Practice — Scale</h4>
+<p>Typical order: 100. Typical fill factor: 67%. Average fanout = 133.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Tree Height</th><th>Records Supported</th><th>Top Levels in Buffer Pool</th></tr></thead>
+<tbody>
+<tr><td>Height 2</td><td>133² = 17,689</td><td>Level 1: 1 page = 8KB</td></tr>
+<tr><td>Height 3</td><td>133³ = 2,352,637</td><td>Level 2: 133 pages = 1MB</td></tr>
+<tr><td>Height 4</td><td>133⁴ = 312,900,700</td><td>Level 3: 17,689 pages = 133MB</td></tr>
+</tbody>
+</table>
+</div>
+<p>A B+ tree of height 4 can index over <strong>312 million records</strong>! And the top levels can be kept in the buffer pool (cached in RAM), meaning most searches cost only <strong>1–2 disk I/Os</strong> for the bottom level(s).</p>
+
+<h3>3.4 — Searching a B+ Tree</h3>
+<p>Search starts at the root and follows child pointers down to the leaf level:</p>
+<div class="steps">
+<div class="step-row">
+  <div class="sbadge">1</div>
+  <div>At each non-leaf node, compare the search key with the entries in the node.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">2</div>
+  <div>Follow the appropriate child pointer: the pointer between the two keys that bracket the search value.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">3</div>
+  <div>Repeat until a leaf is reached. At the leaf, check if the entry exists.</div>
+</div>
+</div>
+
+<div class="box box-example">
+<strong>Search for 15* in the example tree:</strong><br>
+→ At root: 15 > 13, go right child (non-leaf node containing 17|24|30)<br>
+→ At that node: 15 &lt; 17, go leftmost child (leaf with 14*,16*)<br>
+→ At leaf: 14* and 16* are there, but 15* is NOT. Answer: record not found.<br><br>
+<strong>Search for 28* in the tree from Ch8:</strong><br>
+→ Root (17): 28 > 17, go right → node (5|13): 28 > both, go right → node (27): 28 > 27, right → leaf → 27*, 29* found. 28* not in tree.<br><br>
+<strong>Range query: all entries ≥ 24*:</strong><br>
+→ Search for 24* → reach leaf with 24*. Then follow the "next" pointer to scan all subsequent leaves: 24*, 27*, 29*, 33*, 34*, 38*, 39*.
+</div>
+
+<h3>3.5 — Inserting into a B+ Tree</h3>
+
+<div class="steps">
+<div class="step-row green">
+  <div class="sbadge">1</div>
+  <div><strong>Find the correct leaf</strong> L where the entry belongs (same as search).</div>
+</div>
+<div class="step-row green">
+  <div class="sbadge">2</div>
+  <div><strong>If L has space:</strong> Insert the entry. Done!</div>
+</div>
+<div class="step-row green">
+  <div class="sbadge">3</div>
+  <div><strong>If L is full (overflow):</strong> Split L into L and a new leaf L2.
+    <ul>
+      <li>Redistribute entries evenly between L and L2.</li>
+      <li><strong>Copy up</strong> the middle key to the parent (the middle key stays in L2's leaf AND a copy goes to the parent).</li>
+      <li>Insert a new index entry pointing to L2 into L's parent.</li>
+    </ul>
+  </div>
+</div>
+<div class="step-row green">
+  <div class="sbadge">4</div>
+  <div><strong>If parent is also full:</strong> Split the parent index node too.
+    <ul>
+      <li>Redistribute entries evenly.</li>
+      <li><strong>Push up</strong> the middle key to the grandparent (unlike leaf split, the middle key is NOT kept in either child — it's pushed up and disappears from below).</li>
+    </ul>
+  </div>
+</div>
+<div class="step-row green">
+  <div class="sbadge">5</div>
+  <div><strong>If the root splits:</strong> Create a new root with one entry. Tree height increases by 1.</div>
+</div>
+</div>
+
+<div class="box box-warn">
+<strong>Copy-up vs Push-up — critical distinction!</strong><br>
+• When a <em>leaf</em> node splits: the middle key is <em>copied up</em> — it stays in the leaf AND appears in the parent.<br>
+• When an <em>index (non-leaf)</em> node splits: the middle key is <em>pushed up</em> — it is removed from the child and only appears in the parent.
+<br><br>This difference exists because leaf entries are the actual data entries (or pointers to records). Index entries are just routing information.
+</div>
+
+<div class="box box-example">
+<strong>Insert 8* into the example tree (root=13, left subtree: 5 → [2*,3*], [5*,7*]):</strong><br><br>
+1. Search: 8 &lt; 13, go left → non-leaf 5 → 8 > 5, go right → leaf [5*, 7*]<br>
+2. Leaf [5*,7*] has room. Wait — with order d=2, max is 2d=4 entries. [5*,7*,8*] = 3 entries. OK!<br><br>
+Actually in the textbook example the leaf is already full: [5*, 7*] and a split happens:<br>
+• Old leaf: [2*, 3*] — stays<br>
+• New leaf: [5*, 7*, 8*] must split → [5*, 7*] and [8*] wait... textbook shows:<br>
+• After split: left=[2*,3*], right=[5*,7*,8*] → this leaf splits → L=[5*] L2=[7*,8*], copy up 5<br>
+• Index entry 5 inserted into parent (was [5]), becomes [5,5] — too full → split, push up 5 to root<br>
+• Root had [13], now [5,13]... the tree grows wider then root itself splits creating a new root [17]
+</div>
+
+<h3>3.6 — Deleting from a B+ Tree</h3>
+
+<div class="steps">
+<div class="step-row red">
+  <div class="sbadge">1</div>
+  <div><strong>Find leaf L</strong> where entry belongs and remove the entry.</div>
+</div>
+<div class="step-row red">
+  <div class="sbadge">2</div>
+  <div><strong>If L is still at least half-full (≥ d entries):</strong> Done!</div>
+</div>
+<div class="step-row red">
+  <div class="sbadge">3</div>
+  <div><strong>If L is too empty (d-1 entries — underflow):</strong>
+    <ul>
+      <li>Try <strong>redistribution</strong>: borrow an entry from a sibling node (adjacent node with same parent). Update the parent key accordingly. Copy up the new separator.</li>
+      <li>If redistribution fails (sibling is also at minimum): <strong>Merge</strong> L with the sibling into one node.</li>
+    </ul>
+  </div>
+</div>
+<div class="step-row red">
+  <div class="sbadge">4</div>
+  <div><strong>If merge occurred:</strong> Delete the index entry pointing to the merged node from the parent. This can cascade upward, potentially reducing tree height.</div>
+</div>
+</div>
+
+<div class="box box-example">
+<strong>Delete 19* from example tree (leaf contains 19*, 20*):</strong><br>
+→ Remove 19*. Leaf now has [20*]. With d=2, minimum is d=2. Wait — if d=1 minimum is 1. [20*] is still valid. Done!<br><br>
+<strong>Delete 20* from same tree:</strong><br>
+→ Leaf now has []. Underflow! Try redistribution: borrow from right sibling [22*, 24*]. Move 22* to left leaf, update parent key. Result: leaf=[20→22*], sibling=[24*], parent updated to 22.<br><br>
+<strong>Delete 24* (resulting in merge):</strong><br>
+→ Remove 24* → leaf has []. Underflow. Sibling [27*, 29*] is at minimum, can't lend → MERGE.<br>
+→ Merge the two leaves. Parent loses the index entry separating them → "toss" that index entry.<br>
+→ Parent may also underflow → "pull down" the parent's separator from its parent to merge those index nodes.
+</div>
+
+<h3>3.7 — Prefix Key Compression</h3>
+<p>Index pages (non-leaf nodes) only need to <em>direct searches</em> to the right child — they don't need to store full key values. We can compress them.</p>
+<p>Example: If consecutive index entries are "Dannon Yogurt", "David Smith", and "Devarakonda Murthy", we can abbreviate "David Smith" to "Davi" — the shortest string that is greater than "Dannon" and less than "Devarakonda".</p>
+<div class="box box-warn">
+Compression must maintain the rule: each index entry must be <em>greater than every key value in any subtree to its left</em>. "Dav" would be wrong if "Davey Jones" exists — we must use "Davi" at minimum.
+</div>
+<p>Prefix compression allows more entries per page, increasing the fanout F, which reduces tree height and speeds up searches.</p>
+
+<h3>3.8 — Bulk Loading a B+ Tree</h3>
+<p>If you have a large dataset and need to build a B+ tree from scratch, inserting one record at a time is very slow. <strong>Bulk loading</strong> is far more efficient.</p>
+
+<div class="steps">
+<div class="step-row purple">
+  <div class="sbadge">1</div>
+  <div><strong>Sort all data entries</strong> by the search key.</div>
+</div>
+<div class="step-row purple">
+  <div class="sbadge">2</div>
+  <div><strong>Initialize:</strong> Create a root page and insert a pointer to the first sorted leaf page.</div>
+</div>
+<div class="step-row purple">
+  <div class="sbadge">3</div>
+  <div><strong>Process remaining sorted pages:</strong> Add index entries only along the <em>rightmost path</em> of the tree (one new entry per leaf page). When a rightmost index page fills, split it and push up.</div>
+</div>
+</div>
+
+<div class="box box-success">
+<strong>Bulk loading advantages over repeated single inserts:</strong><br>
+1. Fewer I/Os during build (writes are sequential, not random)<br>
+2. Leaf pages are stored sequentially on disk (better for future range scans)<br>
+3. Can control the fill factor (e.g., leave 33% free for future inserts)<br>
+4. Better for concurrency control (fewer lock conflicts during build)
+</div>
+
+<h3>3.9 — ISAM vs B+ Tree Comparison</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Property</th><th>ISAM</th><th>B+ Tree</th></tr></thead>
+<tbody>
+<tr><td>Structure</td><td>Static (fixed after creation)</td><td class="good">Dynamic (adjusts to inserts/deletes)</td></tr>
+<tr><td>Insert/Delete cost</td><td class="bad">Overflow chains degrade over time</td><td class="good">Always O(log F N); height-balanced</td></tr>
+<tr><td>Search cost</td><td>O(log F N) initially, degrades with overflow</td><td class="good">O(log F N) always</td></tr>
+<tr><td>Concurrency control</td><td class="good">Simpler (static structure)</td><td class="warn">More complex (splits/merges)</td></tr>
+<tr><td>Typical use</td><td>Rarely used now</td><td class="good">Default index in all major DBMS</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     CHAPTER 12 — QUERY EVALUATION
+════════════════════════════════════════════════════════ -->
+<section id="s4">
+<div class="sec-label">Chapter 12</div>
+<h2>Overview of Query Evaluation</h2>
+<p class="sec-intro">When you write a SQL query, the DBMS doesn't execute it naively. It generates multiple possible execution plans, estimates the cost of each, and picks the cheapest one. This chapter explains how that process works.</p>
+
+<h3>4.1 — What is a Query Plan?</h3>
+<div class="box box-def">
+A <strong>query plan</strong> (or query evaluation plan) is a tree of relational algebra operators, where each node specifies both the operation to perform (e.g., join, select, project) and the algorithm to use for that operation.<br><br>
+Operators are connected with a <strong>"pull" interface</strong>: when an operator needs its next output tuple, it "pulls" on its input operators, which in turn pull on their inputs, and so on recursively.
+</div>
+
+<div class="box box-analogy">
+Think of a query plan like a factory assembly line. The final output is at the top. Each machine in the line "requests" parts from the machine below it. Data flows upward through the tree as each operator requests more input from its children.
+</div>
+
+<h3>4.2 — Key Algorithmic Techniques</h3>
+<p>Three core techniques are used repeatedly in query evaluation:</p>
+<div class="prop-grid">
+  <div class="prop-card">
+    <h5>🗂 Indexing</h5>
+    <p>Use WHERE condition predicates to retrieve only the tuples that match via an index, rather than scanning the whole table.</p>
+  </div>
+  <div class="prop-card">
+    <h5>🔁 Iteration</h5>
+    <p>Sometimes a full sequential scan is faster than using an index, especially when a large fraction of tuples qualify or when an index-only scan is possible.</p>
+  </div>
+  <div class="prop-card">
+    <h5>🔀 Partitioning</h5>
+    <p>Sort or hash the input to group related tuples together, replacing one expensive operation on large data with multiple cheaper operations on smaller pieces.</p>
+  </div>
+</div>
+
+<h3>4.3 — Statistics and Catalogs</h3>
+<p>To estimate the cost of a plan, the query optimizer needs statistics about the data. These are stored in the system catalog:</p>
+<ul>
+  <li><strong>NTuples(R):</strong> number of tuples in relation R</li>
+  <li><strong>NPages(R):</strong> number of pages in R</li>
+  <li><strong>NKeys(I):</strong> number of distinct key values for index I</li>
+  <li><strong>Low(I), High(I):</strong> minimum and maximum key value in index I</li>
+  <li><strong>Index height:</strong> levels in the B+ tree</li>
+  <li>Sometimes: <strong>histograms</strong> of value distributions for important attributes</li>
+</ul>
+<p>Catalogs are updated periodically (not on every insert/delete — too expensive). The optimizer knows the statistics are approximate, but they're good enough for picking reasonable plans.</p>
+
+<h3>4.4 — Access Paths</h3>
+<p>An <strong>access path</strong> is a method of retrieving tuples. There are two types:</p>
+<ul>
+  <li><strong>File scan:</strong> Read every page and check each tuple against the predicate. Always applicable.</li>
+  <li><strong>Index scan:</strong> Use an index to find qualifying tuples quickly. Only applicable when the query predicate matches the index.</li>
+</ul>
+
+<h4>When Does an Index Match a Query?</h4>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Index Type</th><th>When does it match?</th><th>Example</th></tr></thead>
+<tbody>
+<tr>
+  <td>Tree index on &lt;a, b, c&gt;</td>
+  <td>Query has terms on a <em>prefix</em> of &lt;a, b, c&gt;</td>
+  <td><code>a=5</code> ✓ · <code>a=5 AND b=3</code> ✓ · <code>b=3</code> ✗ (not a prefix)</td>
+</tr>
+<tr>
+  <td>Hash index on &lt;a, b, c&gt;</td>
+  <td>Query has <em>equality</em> terms on ALL attributes of the search key</td>
+  <td><code>a=5 AND b=3 AND c=5</code> ✓ · <code>a=5 AND b=3</code> ✗ · <code>a>5 AND b=3 AND c=5</code> ✗</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>4.5 — Selections</h3>
+<p>Simple selections apply a predicate and return matching tuples.</p>
+
+<div class="box box-example">
+<strong>Query:</strong> <code>SELECT * FROM Reserves R WHERE R.rname &lt; 'C%'</code><br><br>
+Assume 10% of names start with A or B, so 10% of tuples qualify = 100 pages worth, 10,000 tuples.<br><br>
+<strong>With clustered index on rname:</strong> ~100 I/Os (qualifying records are together)<br>
+<strong>With unclustered index on rname:</strong> up to 10,000 I/Os (one I/O per record — each on a different page!)<br><br>
+The difference is 100× — this illustrates why clustering matters so much for range queries.
+</div>
+
+<h4>The Most Selective Access Path Strategy</h4>
+<ol>
+  <li>Find the <strong>most selective access path</strong> — the index or scan that retrieves the fewest pages.</li>
+  <li>Retrieve tuples using that access path.</li>
+  <li>Apply any remaining predicates (those not matched by the index) as a filter on the retrieved tuples.</li>
+</ol>
+
+<div class="box box-example">
+<strong>Query:</strong> <code>WHERE day &lt; '8/9/94' AND bid=5 AND sid=3</code><br><br>
+Option A: B+ tree index on <code>day</code> — matches the range condition <code>day &lt; '8/9/94'</code>. Retrieve those tuples, then check <code>bid=5</code> and <code>sid=3</code> for each.<br><br>
+Option B: Hash index on <code>&lt;bid, sid&gt;</code> — matches the equality conditions <code>bid=5 AND sid=3</code>. Retrieve those tuples, then check <code>day &lt; '8/9/94'</code> for each.<br><br>
+Which is better depends on selectivity. If <code>bid=5 AND sid=3</code> matches very few records, Option B is better. If the date range matches very few records, Option A is better.
+</div>
+
+<h3>4.6 — Projection (Removing Duplicates)</h3>
+<p>The expensive part of <code>SELECT DISTINCT</code> is removing duplicates. Two approaches:</p>
+<ul>
+  <li><strong>Sorting approach:</strong> Sort the result on all projected attributes, then scan linearly and remove consecutive duplicates. Can be optimized by dropping unwanted columns during the sort.</li>
+  <li><strong>Hashing approach:</strong> Hash the result on projected attributes to create partitions. Load each partition, build an in-memory hash table, eliminate duplicates within partition.</li>
+</ul>
+<p>If an index exists with all projected attributes in its search key, an index-only scan may avoid accessing the actual data at all.</p>
+
+<h3>4.7 — Joins</h3>
+<p>Joins are the most expensive and most important operation in query processing. Three main algorithms:</p>
+
+<h4>Algorithm 1: Index Nested Loops Join</h4>
+<p>If one relation (say S) has an index on the join attribute, use it as the "inner" relation.</p>
+<div class="code"><span class="kw">foreach</span> tuple r <span class="op">in</span> R <span class="kw">do</span>
+    <span class="kw">foreach</span> tuple s <span class="op">in</span> S <span class="kw">where</span> r.join_col == s.join_col <span class="kw">do</span>
+        add &lt;r, s&gt; to result</div>
+<p><strong>Cost:</strong> M + (M × pR) × (cost to probe S index)</p>
+<ul>
+  <li>Hash index probe: ~1.2 I/Os</li>
+  <li>B+ tree probe: ~2–4 I/Os</li>
+  <li>Finding matching S tuples: 1 I/O if clustered, up to 1 I/O per match if unclustered</li>
+</ul>
+
+<div class="box box-example">
+<strong>Hash-index on sid of Sailors (as inner), joining with Reserves (as outer):</strong><br>
+• Reserves: 1000 pages, 100 tuples/page → 100,000 tuples<br>
+• For each Reserves tuple: 1.2 I/Os for index + 1 I/O for the matching Sailors tuple<br>
+• Total: 1000 (scan Reserves) + 100,000 × (1.2 + 1) = 1000 + 220,000 = <strong>221,000 I/Os</strong>
+</div>
+
+<h4>Algorithm 2: Sort-Merge Join</h4>
+<p>Sort both relations on the join attribute, then merge-scan them together.</p>
+<div class="steps">
+<div class="step-row">
+  <div class="sbadge">1</div>
+  <div>Sort R on the join column.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">2</div>
+  <div>Sort S on the join column.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">3</div>
+  <div>Scan R and S together: advance R until current R-tuple ≥ current S-tuple, advance S until current S-tuple ≥ current R-tuple. When they match, output all combinations of matching R and S tuples (the "current group").</div>
+</div>
+</div>
+
+<p><strong>Cost:</strong> Sort cost for R + Sort cost for S + (M + N) for the final merge scan</p>
+<p><em>Usually:</em> M·log M + N·log N + (M + N). In extreme cases the final scan can be M×N if all tuples have the same join key.</p>
+
+<div class="box box-example">
+<strong>Reserves</strong> (R=1000 pages) and <strong>Sailors</strong> (S=500 pages):<br>
+With 35 buffer pages: both can be sorted in 2 passes.<br>
+Sort Reserves: 2 × 2 × 1000 = 4000 I/Os<br>
+Sort Sailors: 2 × 2 × 500 = 2000 I/Os<br>
+Merge: 1000 + 500 = 1500 I/Os<br>
+<strong>Total: ~7500 I/Os</strong>
+</div>
+
+<h3>4.8 — Size Estimation and Reduction Factors</h3>
+<p>The optimizer must estimate how many tuples a query will produce to predict costs. For a query block:</p>
+<div class="box box-def">
+<strong>Result cardinality = (max tuples) × (product of all reduction factors)</strong><br><br>
+Maximum tuples = product of cardinalities of all relations in the FROM clause.<br><br>
+Reduction factors (RF) for common predicates:<br>
+• <code>col = value</code>: RF = 1/NKeys(I) (fraction of tuples with that specific value)<br>
+• <code>col1 = col2</code>: RF = 1/MAX(NKeys(I1), NKeys(I2))<br>
+• <code>col &gt; value</code>: RF = (High(I) − value) / (High(I) − Low(I))
+</div>
+<p>These assume independence between predicates — an approximation that works well enough in practice.</p>
+
+<h3>4.9 — The System R Optimizer</h3>
+<p>The most influential query optimizer design, still the basis for most modern optimizers.</p>
+<ul>
+  <li><strong>Works best for up to 10 joins.</strong> Beyond that, the search space explodes.</li>
+  <li><strong>Considers only left-deep plans</strong> — plans where every inner relation in a join is a base table (not the result of another join). Left-deep plans allow <em>pipelining</em>: the output of each join can flow directly into the next without being materialized to disk.</li>
+  <li><strong>Avoids Cartesian products</strong> — only considers join orders where tables are connected by predicates.</li>
+  <li><strong>Prunes the plan space</strong> using dynamic programming: keep the cheapest plan found so far for each subset of tables.</li>
+</ul>
+
+<div class="box box-example">
+<strong>Motivating example — two bad plans vs good plan:</strong><br>
+<code>SELECT S.sname FROM Reserves R, Sailors S WHERE R.sid=S.sid AND R.bid=100 AND S.rating>5</code><br><br>
+<strong>Naive plan (nested loops, no pushdown):</strong> 500 + 500×1000 = 500,500 I/Os<br><br>
+<strong>Better plan (push selections down, sort-merge join):</strong><br>
+• Apply bid=100 to Reserves → ~10 pages (T1), apply rating>5 to Sailors → ~250 pages (T2)<br>
+• Sort T1, sort T2, merge: ~3560 I/Os total<br><br>
+<strong>Best plan (with clustered index on bid):</strong><br>
+• Use clustered index on bid to get 10 pages of matching Reserves tuples<br>
+• Use index nested loops with hash index on sid of Sailors<br>
+• Cost: 10 (fetch Reserves) + 1000 × 1.2 (probe Sailors index) = <strong>1210 I/Os</strong>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     CHAPTER 16 — TRANSACTIONS
+════════════════════════════════════════════════════════ -->
+<section id="s5">
+<div class="sec-label">Chapter 16</div>
+<h2>Transactions</h2>
+<p class="sec-intro">A transaction is one of the most fundamental concepts in databases. It provides a way to group multiple operations into a single logical unit that either fully succeeds or fully fails — protecting data integrity even in the face of crashes and concurrent access.</p>
+
+<h3>5.1 — What is a Transaction?</h3>
+<div class="box box-def">
+A <strong>transaction</strong> is a unit of program execution that accesses and possibly updates various data items. A transaction represents a single logical work unit — for example, a bank transfer, a purchase, or an enrollment in a course.
+</div>
+
+<div class="box box-example">
+<strong>Classic Example: Transfer $50 from Account A to Account B</strong><br><br>
+<code>1. read(A)</code><br>
+<code>2. A := A - 50</code><br>
+<code>3. write(A)</code><br>
+<code>4. read(B)</code><br>
+<code>5. B := B + 50</code><br>
+<code>6. write(B)</code><br><br>
+<strong>Problem if step 3 succeeds but system crashes before step 6:</strong> $50 has been deducted from A but never added to B. The money is "lost"! The total (A+B) is no longer consistent.
+<br><br>
+<strong>Problem if another transaction reads A and B between steps 3 and 6:</strong> It sees A-50 and B (not yet incremented), so it thinks A+B is $50 less than it should be. This is an isolation violation.
+</div>
+
+<h3>5.2 — ACID Properties</h3>
+<p>Transactions must satisfy four properties, collectively called <strong>ACID</strong>:</p>
+
+<div class="acid-grid">
+  <div class="acid-card a">
+    <div class="acid-letter">A</div>
+    <h5>Atomicity</h5>
+    <p>Either ALL operations of the transaction are reflected in the database, or NONE are. No partial execution. If it crashes after step 3, we roll back to the original state.</p>
+  </div>
+  <div class="acid-card c">
+    <div class="acid-letter">C</div>
+    <h5>Consistency</h5>
+    <p>Execution of a transaction in isolation takes the database from one consistent state to another. The transaction must not violate integrity constraints. (A+B must remain unchanged after the transfer.)</p>
+  </div>
+  <div class="acid-card i">
+    <div class="acid-letter">I</div>
+    <h5>Isolation</h5>
+    <p>Concurrent transactions must behave as if each executed serially (one at a time). Intermediate results of a transaction must be hidden from other transactions.</p>
+  </div>
+  <div class="acid-card d">
+    <div class="acid-letter">D</div>
+    <h5>Durability</h5>
+    <p>Once a transaction commits, its changes are permanent — even if the system crashes immediately after. Changes are written to non-volatile storage.</p>
+  </div>
+</div>
+
+<h3>5.3 — Transaction States</h3>
+<p>A transaction progresses through a well-defined lifecycle:</p>
+
+<div class="states">
+  <div class="sbox s-active">Active</div>
+  <span class="sarrow">→</span>
+  <div class="sbox s-partial">Partially Committed</div>
+  <span class="sarrow">→</span>
+  <div class="sbox s-committed">Committed</div>
+</div>
+<div class="states">
+  <div class="sbox s-active">Active</div>
+  <span class="sarrow">→</span>
+  <div class="sbox s-failed">Failed</div>
+  <span class="sarrow">→</span>
+  <div class="sbox s-aborted">Aborted</div>
+</div>
+
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>State</th><th>Description</th><th>What happens next?</th></tr></thead>
+<tbody>
+<tr><td class="hi">Active</td><td>The transaction is currently executing. Read/write operations are happening.</td><td>→ Partially Committed (on final statement) OR → Failed (on error)</td></tr>
+<tr><td class="hi">Partially Committed</td><td>The last statement has been executed. The transaction is ready to commit but hasn't been made permanent yet.</td><td>→ Committed (if write to disk succeeds) OR → Failed (if disk write fails)</td></tr>
+<tr><td class="hi">Failed</td><td>Normal execution cannot proceed. An error was discovered.</td><td>→ Aborted (must roll back)</td></tr>
+<tr><td class="hi">Aborted</td><td>Transaction rolled back; database restored to pre-transaction state.</td><td>→ Restart the transaction (if no internal logic error), OR Kill it permanently</td></tr>
+<tr><td class="hi">Committed</td><td>Transaction completed successfully. All changes are permanent.</td><td>Terminal state — no going back</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>5.4 — Concurrent Execution: Why It's Needed</h3>
+<p>Running transactions one at a time (serially) is safe but wasteful. While one transaction waits for disk I/O, the CPU sits idle. Concurrent execution allows:</p>
+<ul>
+  <li><strong>Better CPU/disk utilization:</strong> While T1 waits for a disk read, T2 can use the CPU.</li>
+  <li><strong>Better response time:</strong> Short transactions don't have to wait behind long ones.</li>
+  <li><strong>Higher throughput:</strong> More transactions per second.</li>
+</ul>
+<p>But concurrency introduces the risk of transactions interfering with each other. The goal of <strong>concurrency control</strong> is to allow concurrent execution while ensuring correctness (serializability).</p>
+
+<h3>5.5 — Schedules</h3>
+<div class="box box-def">
+A <strong>schedule</strong> is a sequence of operations from multiple transactions, specifying the chronological order in which the operations execute. A schedule must include all operations of all transactions, and must preserve the relative order of operations within each individual transaction.
+</div>
+
+<h4>Serial vs Concurrent Schedules</h4>
+<p>In a <strong>serial schedule</strong>, one transaction completes entirely before the next begins. There is no interleaving.</p>
+
+<div class="sched">
+<span class="lbl">Schedule 1 — Serial: T1 then T2 (A=1000, B=2000 initially)</span>
+<span class="t1c">T1: read(A)   A:=A-50   write(A)   read(B)   B:=B+50   write(B)</span>
+<span class="t2c">                                                                        T2: read(A)   A:=A*0.9   write(A)   read(B)   B:=B*0.9   write(B)</span>
+Result: A+B = (1000-50)*0.9 + (2000+50)*0.9 = 2700
+</div>
+
+<div class="sched">
+<span class="lbl">Schedule 3 — Interleaved, but equivalent to Schedule 1</span>
+<span class="t1c">T1: read(A)</span>
+<span class="t1c">T1: write(A)</span>
+<span class="t2c">             T2: read(A)</span>
+<span class="t2c">             T2: write(A)</span>
+<span class="t2c">             T2: read(B)</span>
+<span class="t2c">             T2: write(B)</span>
+<span class="t1c">T1: read(B)</span>
+<span class="t1c">T1: write(B)</span>
+This interleaved schedule gives same result as Schedule 1 → it's serializable!
+</div>
+
+<div class="sched">
+<span class="lbl">Schedule 4 — Interleaved, NOT serializable (INCORRECT)</span>
+<span class="t1c">T1: read(A)   A:=A-50   write(A)</span>
+<span class="t2c">                                    T2: read(A)  read(B)  <span class="conf">print(A+B)</span>  ← sees inconsistent state!</span>
+<span class="t1c">T1: read(B)   B:=B+50   write(B)</span>
+T2 reads A after deduction but before B is incremented → prints A+B = $1050 instead of $3000!
+</div>
+
+<h3>5.6 — Serializability</h3>
+<p>The key correctness criterion: a schedule is correct if it is <strong>equivalent to some serial schedule</strong>.</p>
+
+<h4>Conflicting Instructions</h4>
+<p>Two instructions conflict if they access the same data item AND at least one of them writes to it:</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Instruction pair</th><th>Conflict?</th><th>Why?</th></tr></thead>
+<tbody>
+<tr><td><code>Ti: read(Q), Tj: read(Q)</code></td><td class="good">No conflict</td><td>Two reads never interfere</td></tr>
+<tr><td><code>Ti: read(Q), Tj: write(Q)</code></td><td class="bad">CONFLICT</td><td>Tj's write changes what Ti would read</td></tr>
+<tr><td><code>Ti: write(Q), Tj: read(Q)</code></td><td class="bad">CONFLICT</td><td>Ti's write changes what Tj reads</td></tr>
+<tr><td><code>Ti: write(Q), Tj: write(Q)</code></td><td class="bad">CONFLICT</td><td>Which write "wins"? Order matters.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Conflict Serializability</h4>
+<div class="box box-def">
+A schedule S is <strong>conflict serializable</strong> if it can be transformed into a serial schedule by repeatedly swapping adjacent <em>non-conflicting</em> operations.
+</div>
+
+<div class="box box-example">
+<strong>Is this schedule conflict serializable?</strong><br>
+T3: R(Q) → T4: W(Q) → T3: W(Q) → T4: R(Q)<br><br>
+Try to get to T3 then T4: Need to move T3's W(Q) before T4's W(Q). But T4's W(Q) conflicts with T3's W(Q). Can't swap!<br>
+Try to get to T4 then T3: Need to move T4's R(Q) before T3's R(Q). T4's R(Q) conflicts with T3's W(Q). Can't swap!<br>
+→ <strong>Not conflict serializable.</strong>
+</div>
+
+<h4>The Precedence Graph (Dependency Graph) Test</h4>
+<div class="box box-success">
+<strong>Test for Conflict Serializability:</strong><br>
+1. Build a precedence graph: one node per transaction.<br>
+2. Draw an edge from Ti → Tj if Ti has an operation that conflicts with a later operation of Tj (i.e., Ti "goes before" Tj in the conflict).<br>
+3. The schedule is conflict serializable <strong>if and only if the precedence graph has no cycles</strong>.
+</div>
+
+<div class="box box-example">
+<strong>Example schedule:</strong><br>
+T1: R(A), W(A) | T2: R(A), W(A)<br>
+T1: R(B), W(B) | T2: R(B), W(B)<br><br>
+Conflict analysis:<br>
+• T1 R(A) before T2 W(A) → T1 → T2 (edge for A)<br>
+• T2 R(A) before T1 W(A) → T2 → T1 (edge for A)<br>
+• Same pattern for B...<br><br>
+Result: T1 → T2 AND T2 → T1 → <strong>cycle! NOT conflict serializable.</strong>
+</div>
+
+<h4>View Serializability (Broader)</h4>
+<div class="box box-def">
+Two schedules S and S' are <strong>view equivalent</strong> if for every data item Q:<br>
+1. The same transaction reads the initial value of Q in both schedules.<br>
+2. The same transaction performs the final write on Q in both schedules.<br>
+3. Every read of Q reads from the same writer in both schedules.<br><br>
+A schedule is <strong>view serializable</strong> if it is view equivalent to some serial schedule.
+</div>
+
+<ul>
+  <li>Every conflict serializable schedule is also view serializable (conflict ⊂ view).</li>
+  <li>Some schedules are view serializable but NOT conflict serializable — these involve "blind writes" (writes not preceded by reads of the same item).</li>
+  <li>Testing view serializability is NP-complete — no efficient algorithm is known.</li>
+</ul>
+
+<h3>5.7 — Recoverability</h3>
+<p>Even a serializable schedule can be problematic if transactions can abort after others have read their uncommitted writes.</p>
+
+<h4>Recoverable Schedules</h4>
+<div class="box box-def">
+A schedule is <strong>recoverable</strong> if: whenever Tj reads a value written by Ti, then Ti must commit before Tj commits. (No transaction commits based on data from an uncommitted transaction.)
+</div>
+
+<h4>Cascading Rollbacks Problem</h4>
+<div class="sched">
+<span class="lbl">Cascading rollback scenario</span>
+<span class="t1c">T10: W(A)</span>
+<span class="t2c">            T11: R(A)  W(A)</span>
+<span class="t3c">                                T12: R(A)</span>
+If T10 aborts → T11 must also roll back (read uncommitted data) → T12 must also roll back
+Three rollbacks from one failure!
+</div>
+
+<h4>Cascadeless Schedules</h4>
+<div class="box box-success">
+A <strong>cascadeless schedule</strong> ensures that Tj can only read a value written by Ti AFTER Ti has committed. This prevents cascading rollbacks entirely. Every cascadeless schedule is also recoverable.
+</div>
+
+<h3>5.8 — Isolation Levels in SQL</h3>
+<p>Full serializability can be expensive. SQL-92 defines four isolation levels that trade safety for performance:</p>
+
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Isolation Level</th><th>Dirty Read</th><th>Unrepeatable Read</th><th>Phantom Problem</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td class="hi">Read Uncommitted</td><td class="bad">Possible</td><td class="bad">Possible</td><td class="bad">Possible</td><td>Most permissive; no locking for reads</td></tr>
+<tr><td class="hi">Read Committed</td><td class="good">No</td><td class="bad">Possible</td><td class="bad">Possible</td><td>Default in many systems (Oracle, PostgreSQL)</td></tr>
+<tr><td class="hi">Repeatable Read</td><td class="good">No</td><td class="good">No</td><td class="bad">Possible</td><td>Same row always returns same value</td></tr>
+<tr><td class="hi">Serializable</td><td class="good">No</td><td class="good">No</td><td class="good">No</td><td>Full correctness; default per SQL standard</td></tr>
+</tbody>
+</table>
+</div>
+
+<ul>
+  <li><strong>Dirty read:</strong> Reading a value written by an uncommitted transaction.</li>
+  <li><strong>Unrepeatable read:</strong> Reading the same row twice in one transaction and getting different values (another transaction committed an update in between).</li>
+  <li><strong>Phantom problem:</strong> Re-running a range query in the same transaction returns different sets of rows (another transaction inserted/deleted rows that match the range).</li>
+</ul>
+
+<h3>5.9 — Transactions in SQL</h3>
+<ul>
+  <li>A SQL transaction begins <strong>implicitly</strong> (no explicit BEGIN needed in standard SQL).</li>
+  <li><code>COMMIT WORK</code> — makes all changes permanent and begins a new transaction.</li>
+  <li><code>ROLLBACK WORK</code> — undoes all changes since the transaction started (aborts).</li>
+  <li>By default, most systems use <strong>auto-commit</strong>: each single SQL statement is its own transaction. This can be disabled: <code>connection.setAutoCommit(false)</code> in JDBC.</li>
+  <li>Isolation level: <code>SET TRANSACTION ISOLATION LEVEL SERIALIZABLE</code></li>
+</ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     CHAPTER 17 — CONCURRENCY CONTROL
+════════════════════════════════════════════════════════ -->
+<section id="s6">
+<div class="sec-label">Chapter 17</div>
+<h2>Concurrency Control</h2>
+<p class="sec-intro">Concurrency control is the mechanism that ensures multiple simultaneously executing transactions produce correct (serializable) results. This chapter covers locking protocols, deadlocks, multi-granularity locking, optimistic concurrency control, and timestamp-based methods.</p>
+
+<h3>6.1 — Conflict Serializable Schedules (Review)</h3>
+<div class="box box-def">
+Two schedules are <strong>conflict equivalent</strong> if they involve the same actions of the same transactions AND every pair of conflicting actions is ordered the same way in both schedules.<br><br>
+A schedule is <strong>conflict serializable</strong> if it is conflict equivalent to some serial schedule.
+</div>
+<p>The dependency graph captures conflicts: there is an edge Ti → Tj if Tj reads/writes an object last written by Ti. Schedule is conflict serializable if and only if the dependency graph is <strong>acyclic</strong>.</p>
+
+<h3>6.2 — Two-Phase Locking (2PL)</h3>
+<p>The most widely used concurrency control mechanism. Every transaction must follow a strict locking discipline:</p>
+
+<h4>Lock Types</h4>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Lock Mode</th><th>Symbol</th><th>Allows</th><th>Blocks</th></tr></thead>
+<tbody>
+<tr><td>Shared lock</td><td class="hi">S</td><td>Multiple readers simultaneously</td><td>Writers (X)</td></tr>
+<tr><td>Exclusive lock</td><td class="hi">X</td><td>One writer exclusively</td><td>All other readers and writers</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box box-def">
+<strong>Two-Phase Locking Protocol:</strong><br>
+1. A transaction must obtain an S lock before reading an object.<br>
+2. A transaction must obtain an X lock before writing an object.<br>
+3. A transaction cannot request new locks after it has released any lock.<br><br>
+This creates two phases: a <strong>growing phase</strong> (acquiring locks) and a <strong>shrinking phase</strong> (releasing locks). Once you release one lock, you can never acquire new ones.
+</div>
+
+<div class="box box-def">
+<strong>Strict 2PL:</strong> A stronger version — all locks held by a transaction are released <em>only when the transaction completes</em> (commits or aborts). This ensures recoverability and cascadeless rollback.
+</div>
+
+<div class="box box-success">
+Strict 2PL ensures only schedules with acyclic precedence graphs are allowed — i.e., only conflict serializable schedules. It's the most common protocol used in production systems.
+</div>
+
+<h3>6.3 — Lock Management</h3>
+<p>A dedicated <strong>lock manager</strong> component handles all lock requests. It maintains a <strong>lock table</strong> — a hash table indexed by object (data item). Each entry contains:</p>
+<ul>
+  <li>Number of transactions currently holding a lock on this object</li>
+  <li>Type of lock held (S or X)</li>
+  <li>A queue of pending lock requests</li>
+</ul>
+<p>Lock and unlock operations must be <strong>atomic</strong> — no partial execution.</p>
+<p><strong>Lock upgrade:</strong> A transaction holding an S lock can upgrade to an X lock if no other transaction holds an S lock on the same object.</p>
+
+<h3>6.4 — Deadlocks</h3>
+<div class="box box-def">
+A <strong>deadlock</strong> is a situation where a cycle of transactions each waits for a lock held by the next transaction in the cycle. No transaction can proceed — they're all blocked waiting for each other.
+</div>
+
+<div class="box box-example">
+<strong>Deadlock example:</strong><br>
+T1: holds S(A), wants X(B)<br>
+T2: holds X(B), wants S(A)<br><br>
+T1 waits for T2 to release B. T2 waits for T1 to release A. → Deadlock!
+</div>
+
+<h4>Dealing with Deadlocks: Two Approaches</h4>
+
+<h5>Approach 1: Deadlock Prevention</h5>
+<p>Assign priorities to transactions based on timestamps (older = higher priority). Two policies:</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Policy</th><th>Ti wants lock held by Tj. Ti is older (higher priority).</th><th>Ti is younger (lower priority).</th></tr></thead>
+<tbody>
+<tr><td class="hi">Wait-Die</td><td class="good">Ti waits for Tj</td><td class="bad">Ti aborts ("dies")</td></tr>
+<tr><td class="hi">Wound-Wait</td><td class="bad">Tj aborts ("wounded" by Ti)</td><td class="good">Ti waits for Tj</td></tr>
+</tbody>
+</table>
+</div>
+<div class="box box-note">
+Key rule: When a transaction restarts after being aborted, it keeps its <em>original</em> timestamp. This prevents starvation — an older transaction will eventually be old enough to proceed.
+</div>
+
+<h5>Approach 2: Deadlock Detection</h5>
+<p>Let deadlocks happen, then detect and resolve them:</p>
+<div class="steps">
+<div class="step-row">
+  <div class="sbadge">1</div>
+  <div>Build a <strong>waits-for graph</strong>: one node per transaction, edge Ti → Tj if Ti is waiting for Tj to release a lock.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">2</div>
+  <div>Periodically check for <strong>cycles</strong> in the waits-for graph.</div>
+</div>
+<div class="step-row">
+  <div class="sbadge">3</div>
+  <div>If a cycle is found, choose a <strong>victim</strong> transaction to abort (typically the youngest, or the one with least work done), breaking the cycle.</div>
+</div>
+</div>
+
+<div class="box box-example">
+<strong>Deadlock detection example:</strong><br>
+T1: S(A) → wants S(B); T2: X(B) → wants X(C); T3: S(C) → wants X(A); T4: wants X(B)<br><br>
+Waits-for graph: T1→T2, T2→T3, T3→T1 → CYCLE! Deadlock among T1, T2, T3.<br>
+T4→T2 but T4 is not in a cycle.<br><br>
+Resolution: Abort one of T1/T2/T3 to break the cycle.
+</div>
+
+<h3>6.5 — Multiple Granularity Locking</h3>
+<p>Should we lock individual tuples, pages, or entire tables? Each has trade-offs:</p>
+<ul>
+  <li><strong>Fine granularity (tuple-level):</strong> More concurrency, but high lock management overhead (thousands of lock requests per query).</li>
+  <li><strong>Coarse granularity (table-level):</strong> Low overhead, but poor concurrency (one transaction blocks entire table).</li>
+</ul>
+
+<p><strong>Solution:</strong> Allow locking at multiple levels simultaneously, using special <strong>intention locks</strong> to signal intent at higher levels.</p>
+
+<h4>Intention Lock Modes</h4>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Lock Mode</th><th>Meaning</th><th>Use case</th></tr></thead>
+<tbody>
+<tr><td class="hi">IS (Intention Shared)</td><td>"I will place S locks on some descendant nodes"</td><td>A transaction wants to read some tuples in this table</td></tr>
+<tr><td class="hi">IX (Intention Exclusive)</td><td>"I will place X locks on some descendant nodes"</td><td>A transaction wants to write some tuples in this table</td></tr>
+<tr><td class="hi">S (Shared)</td><td>Read all tuples in this node</td><td>Full table scan with no writes</td></tr>
+<tr><td class="hi">SIX (Shared + Intention Exclusive)</td><td>Read all tuples AND write some tuples</td><td>Scan table and update some rows</td></tr>
+<tr><td class="hi">X (Exclusive)</td><td>Write all tuples in this node</td><td>Full table update</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Protocol Rules</h4>
+<ul>
+  <li>To get S or IS on a node, must hold IS or IX on the parent.</li>
+  <li>To get X, IX, or SIX on a node, must hold IX or SIX on the parent.</li>
+  <li>When releasing, go <strong>bottom-up</strong> (most specific to most general).</li>
+  <li>When acquiring, start from <strong>root and go down</strong>.</li>
+</ul>
+
+<div class="box box-example">
+<strong>T1 scans table R and updates a few tuples:</strong><br>
+→ T1 gets SIX on R (will read all, write some), then S on each tuple it reads, then upgrades to X on tuples it updates.<br><br>
+<strong>T2 uses an index to read only part of R:</strong><br>
+→ T2 gets IS on R, then S on each specific tuple it reads.<br><br>
+<strong>T3 reads all of R (full table scan):</strong><br>
+→ T3 gets S on R. Much simpler than getting S on every individual tuple!<br><br>
+<strong>T1 and T2 are compatible</strong> (SIX vs IS = compatible — they can run concurrently!).<br>
+<strong>T1 and T3 are NOT compatible</strong> (SIX vs S = incompatible — T3 must wait for T1 or vice versa).
+</div>
+
+<h3>6.6 — The Phantom Problem</h3>
+<p>Even with Strict 2PL, there's a subtle problem with dynamic databases:</p>
+
+<div class="box box-example">
+<strong>Phantom scenario:</strong><br>
+T1 finds the oldest sailor with rating=1 (say age=71) and does more work.<br>
+T2 inserts a new sailor with rating=1 and age=96, then deletes the oldest sailor with rating=2.<br>
+T1 later finds the oldest sailor with rating=2 (say age=63).<br><br>
+Problem: There is no serial schedule T1→T2 or T2→T1 that gives this result! T1 has implicitly "locked the set of all sailors with rating=1" but a new one was inserted that T1 never saw.
+<br><br>This is the <strong>phantom problem</strong>: a transaction operates on a logical set of records, but Strict 2PL only locks the physical records that existed at the time.
+</div>
+
+<h4>Solutions to the Phantom Problem</h4>
+<ul>
+  <li><strong>Index locking:</strong> Lock the index page(s) that would contain the new record. T1 should lock the index page for rating=1 entries. T2's insert must also access (and lock) that page → conflict detected!</li>
+  <li><strong>Predicate locking:</strong> Lock all records satisfying a predicate (e.g., rating=1). Index locking is a special case of this. Predicate locking is more general but has high overhead.</li>
+</ul>
+
+<h3>6.7 — Locking in B+ Trees</h3>
+<p>B+ trees present a special challenge: every search starts at the root, so the root would become a terrible bottleneck if we naively locked it for every operation.</p>
+
+<h4>Simple Algorithm (Inefficient)</h4>
+<p>Follow 2PL — lock each page as you traverse the tree, release when done. Problem: the root and upper levels must be locked for every search → terrible concurrency bottleneck.</p>
+
+<h4>Better Algorithm (Bayer-Schkolnick)</h4>
+<div class="box box-def">
+<strong>For Search:</strong> At each level, get S lock on child, then release S lock on parent.<br><br>
+<strong>For Insert/Delete (basic):</strong> Traverse with X locks. At each node, check if it's "safe" (won't need to split/merge):<br>
+• Safe for insert: node is not full<br>
+• Safe for delete: node is more than half-full<br>
+If child is safe, release all locks on ancestors (they won't be affected).
+</div>
+
+<h4>Even Better: Optimistic Tree Locking</h4>
+<div class="box box-note">
+<strong>Optimistic approach:</strong> First traverse the tree setting S locks (as if for search). Get to the leaf and set X. If the leaf is safe, proceed. If not safe (need to split), release everything and redo with X locks from the root.
+<br><br>
+<strong>Why better?</strong> In practice, splits are rare (67% fill factor means most insertions don't need a split). So most insert traversals only need S locks on the path — great concurrency!
+</div>
+
+<h4>Hybrid Algorithm</h4>
+<p>The likelihood that an X lock is actually needed decreases as we go higher in the tree. The hybrid approach uses different lock types at different levels:</p>
+<ul>
+  <li>Upper levels: S locks (likely not needed for modification)</li>
+  <li>Middle levels: SIX locks</li>
+  <li>Lower levels and leaf: X locks</li>
+</ul>
+
+<h3>6.8 — Optimistic Concurrency Control (Kung-Robinson)</h3>
+<p>Locking is a <strong>pessimistic</strong> approach — it prevents conflicts by blocking. If conflicts are rare (reads common, writes rare), locking overhead may not be worth it.</p>
+
+<div class="box box-def">
+<strong>Optimistic CC:</strong> Instead of locking, let transactions run freely and check for conflicts only at the end.<br><br>
+Each transaction has three phases:<br>
+1. <strong>READ phase:</strong> Read from the database, but make all writes to <em>private copies</em> of objects.<br>
+2. <strong>VALIDATE phase:</strong> Check whether any conflicts occurred.<br>
+3. <strong>WRITE phase:</strong> If validation passes, make the private writes global (visible to others). If not, restart.
+</div>
+
+<h4>Validation: Three Tests</h4>
+<p>Transactions are assigned IDs at the end of their READ phase. Ti &lt; Tj means Ti was validated before Tj.</p>
+
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Test</th><th>Condition</th><th>Ensures</th></tr></thead>
+<tbody>
+<tr>
+  <td class="hi">Test 1</td>
+  <td>Ti completes entirely before Tj begins</td>
+  <td>No overlap → trivially safe</td>
+</tr>
+<tr>
+  <td class="hi">Test 2</td>
+  <td>Ti completes before Tj starts its Write phase, AND WriteSet(Ti) ∩ ReadSet(Tj) = ∅</td>
+  <td>Tj doesn't read data written by Ti after Ti committed</td>
+</tr>
+<tr>
+  <td class="hi">Test 3</td>
+  <td>Ti completes READ phase before Tj, AND WriteSet(Ti) ∩ ReadSet(Tj) = ∅, AND WriteSet(Ti) ∩ WriteSet(Tj) = ∅</td>
+  <td>Neither dirty reads nor write-write conflicts</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h4>Serial Validation</h4>
+<p>To validate transaction T: check T against all transactions Ts that committed after T began:</p>
+<div class="code"><span class="kw">valid</span> = true
+<span class="cmt">-- S = set of Xacts that committed after Begin(T)</span>
+&lt; <span class="kw">foreach</span> Ts <span class="op">in</span> S <span class="kw">do</span>
+    <span class="kw">if</span> WriteSet(Ts) <span class="op">intersects</span> ReadSet(T)
+        valid = false
+<span class="kw">if</span> valid:
+    install updates   <span class="cmt">-- Write phase</span>
+    Commit T
+<span class="kw">else</span>:
+    Restart T &gt;    <span class="cmt">-- critical section ends</span></div>
+
+<h4>Overheads of Optimistic CC</h4>
+<ul>
+  <li>Must track ReadSet and WriteSet for every transaction.</li>
+  <li>Validation and write phase must be in a <strong>critical section</strong> (serialized).</li>
+  <li>Failed validations waste all the work done in the READ phase.</li>
+  <li>Work done on private copies may reduce clustering benefits.</li>
+</ul>
+
+<h3>6.9 — Timestamp-Based Concurrency Control</h3>
+<p>An alternative to locking: use timestamps to order transactions and detect out-of-order accesses.</p>
+
+<div class="box box-def">
+Each transaction T is assigned a timestamp TS(T) when it begins.<br>
+Each data object O has two timestamps:<br>
+• <strong>RTS(O)</strong> — the timestamp of the most recent transaction that READ O<br>
+• <strong>WTS(O)</strong> — the timestamp of the most recent transaction that WROTE O<br><br>
+Rule: If action ai of Ti conflicts with action aj of Tj, and TS(Ti) &lt; TS(Tj), then ai must occur before aj.
+</div>
+
+<h4>When T Wants to Read Object O</h4>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Condition</th><th>Action</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td><code>TS(T) &lt; WTS(O)</code></td><td class="bad">Abort and restart T with new (larger) TS</td><td>T is trying to read a value that a "newer" transaction has already overwritten — too late!</td></tr>
+<tr><td><code>TS(T) &gt;= WTS(O)</code></td><td class="good">Allow read; set RTS(O) = max(RTS(O), TS(T))</td><td>T is reading a version that was written before T's timestamp — correct order.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>When T Wants to Write Object O</h4>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Condition</th><th>Action</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td><code>TS(T) &lt; RTS(O)</code></td><td class="bad">Abort and restart T</td><td>A newer transaction already read O — allowing T's write would violate timestamp order.</td></tr>
+<tr><td><code>TS(T) &lt; WTS(O)</code></td><td class="warn">Thomas Write Rule: Safely IGNORE (skip the write!)</td><td>O already has a newer version. T's write is obsolete — no one will ever read it. No restart needed.</td></tr>
+<tr><td><code>TS(T) &gt;= WTS(O) AND TS(T) &gt;= RTS(O)</code></td><td class="good">Allow write; set WTS(O) = TS(T)</td><td>No conflict — proceed normally.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Recoverability Issue with Timestamp CC</h4>
+<p>Timestamp CC can allow unrecoverable schedules — T2 reads a value written by T1, then T1 aborts. T2 has read garbage data. To fix this:</p>
+<ul>
+  <li>Buffer all writes until the writer commits.</li>
+  <li>Block readers until the writer of the version they want to read has committed.</li>
+</ul>
+
+<h3>6.10 — Multiversion Timestamp Concurrency Control</h3>
+<div class="box box-def">
+<strong>Multiversion CC:</strong> Instead of one version of each object, keep multiple versions. Writers create new copies; readers use an appropriate older version.<br><br>
+Key benefit: <strong>readers never block writers and writers never block readers.</strong>
+</div>
+
+<h4>For Readers (Reader Transactions)</h4>
+<p>Find the newest version of O with WTS ≤ TS(T) — the newest version that was written by a "past" transaction. Readers are <strong>never restarted</strong> (some version of every object always exists from "the beginning of time").</p>
+
+<h4>For Writers (Writer Transactions)</h4>
+<p>To write object O: find the newest version V with WTS(V) ≤ TS(T). If RTS(V) ≤ TS(T), create a new copy CV with WTS(CV) = TS(T). Otherwise (RTS(V) > TS(T)), reject the write — a newer reader has already read a version that this write would invalidate.</p>
+
+<div class="box box-note">
+Old versions can be discarded when no active transaction could possibly need them (i.e., their timestamp is older than the oldest active transaction). Version maintenance has storage overhead but provides excellent read concurrency.
+</div>
+
+<h3>6.11 — Comparison of Concurrency Control Schemes</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Scheme</th><th>Mechanism</th><th>Best for</th><th>Overhead</th></tr></thead>
+<tbody>
+<tr><td class="hi">Strict 2PL</td><td>Locking; release on commit only</td><td>General use, high conflict workloads</td><td>Lock management, deadlock detection</td></tr>
+<tr><td class="hi">2PL</td><td>Locking; can release before commit</td><td>Higher concurrency than Strict 2PL</td><td>Cascading rollback possible</td></tr>
+<tr><td class="hi">Optimistic CC</td><td>No locks; validate at commit</td><td>Low conflict, read-heavy workloads</td><td>ReadSet/WriteSet overhead; wasted work on abort</td></tr>
+<tr><td class="hi">Timestamp CC</td><td>Timestamps; abort if out of order</td><td>Distributed systems; some schedules 2PL can't do</td><td>RTS/WTS updates on every read; restarts</td></tr>
+<tr><td class="hi">Multiversion CC</td><td>Multiple versions + timestamps</td><td>Read-heavy; MVCC in PostgreSQL/Oracle/MySQL</td><td>Version storage; garbage collection</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box box-success">
+<strong>What does PostgreSQL use?</strong> Multiversion Concurrency Control (MVCC) — the default in most modern DBMS (PostgreSQL, MySQL InnoDB, Oracle, SQL Server with snapshot isolation). This is why readers and writers rarely block each other in practice.
+</div>
+</section>
+
+</main>
+
+<footer>
+  DBMS Complete Study Guide · Chapters 8 · 9 · 10 · 12 · 16 · 17<br>
+  Ramakrishnan &amp; Gehrke "Database Management Systems" 3rd Ed. · For Academic Study
+</footer>
+
+</body>
+</html>

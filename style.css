@@ -987,12 +987,26 @@ body {
         gap: 8px;
     }
 
+    #btnTwoPage,
+    #btnFullscreen {
+        display: none !important;
+    }
+
+    .viewer-title {
+        font-size: 0.75rem;
+        max-width: 120px;
+    }
+
     .pdf-canvas-container {
-        padding: 12px;
+        padding: 8px;
     }
 
     .welcome-screen {
-        padding: 20px;
+        padding: 16px;
+    }
+
+    .welcome-card {
+        padding: 0;
     }
 
     .welcome-title {
