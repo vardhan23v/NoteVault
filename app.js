@@ -5,7 +5,8 @@ const SUBJECTS = [
         fullName: "Design & Analysis of Algorithms",
         color: "#f97316",
         files: [
-            { name: "DAA SEE.pdf", path: "DAA/DAA SEE.pdf", size: "15.2 MB" }
+            { name: "DAA SEE.pdf", path: "DAA/DAA SEE.pdf", size: "15.2 MB" },
+            { name: "DAA Study Guide.pdf", path: "DAA/DAA_Study_Guide.pdf", size: "43 KB" }
         ],
         subcategories: [
             {
@@ -77,12 +78,9 @@ const SUBJECTS = [
         color: "#10b981",
         files: [
             { name: "4th Sem Math 2025.pdf", path: "M4/4TH SEM MATH 2025.pdf", size: "1.4 MB" },
-            { name: "Maths Unit 3.pdf", path: "M4/Maths Unit-3(2).pdf", size: "17.1 MB" },
             { name: "Maths Unit 3 (New).pdf", path: "M4/Maths unit 3.pdf", size: "8.5 MB" },
             { name: "Maths Unit 3 (FSEC).pdf", path: "M4/Maths unit 3_fsec.pdf", size: "8.5 MB" },
             { name: "MAT Unit 2.pdf", path: "M4/MAT Unit 2.pdf", size: "22.4 MB" },
-            { name: "DocScanner 04-Apr-2026.pdf", path: "M4/DocScanner 04-Apr-2026 09-57 PM.pdf", size: "22.9 MB" },
-            { name: "DocScanner 15-Feb-2026.pdf", path: "M4/DocScanner 15-Feb-2026 06-33 PM.pdf", size: "21.5 MB" },
             { name: "Maths Sem4 Unit 2.pdf", path: "M4/maths_sem4_unit2 E.pdf", size: "32.7 MB" },
             { name: "MSE 1 Handwritten Notes.pdf", path: "M4/mse 1 hand written.pdf", size: "23.7 MB" },
             { name: "MSE 1 Handwritten Notes 2.pdf", path: "M4/mse 1 hand written 2.pdf", size: "23.7 MB" },
@@ -138,6 +136,16 @@ const SUBJECTS = [
                     { name: "Instruction Formats.ppt", path: "MP & ES/mp unit 3/1-Instruction Formats.ppt", size: "3.7 MB" },
                     { name: "8086 Interrupts & 8259A.ppt", path: "MP & ES/mp unit 3/3-8086Interrupts and 8259A.ppt", size: "461 KB" },
                     { name: "Hardware Specifications 8086.ppt", path: "MP & ES/mp unit 3/hardware specifications-8086.ppt", size: "3.3 MB" }
+                ]
+            },
+            {
+                name: "Question Banks & PYQP",
+                files: [
+                    { name: "MP SEE PYQP.pdf", path: "MP & ES/MP_QB_AND_PYQP/MP SEE_pyqp.pdf", size: "16.5 MB" },
+                    { name: "MP Unit 1 QBank.docx", path: "MP & ES/MP_QB_AND_PYQP/MP_UNIT1_QBANK.docx", size: "18 KB" },
+                    { name: "MP Unit 2 QBank.docx", path: "MP & ES/MP_QB_AND_PYQP/MP_UNIT2_QBANK.docx", size: "19 KB" },
+                    { name: "MP Unit 3 QBank.docx", path: "MP & ES/MP_QB_AND_PYQP/MP_UNIT3_QBANK.docx", size: "17 KB" },
+                    { name: "MP MSE1 QB.pdf", path: "MP & ES/MP_QB_AND_PYQP/mp_mse1_qb.pdf", size: "248 KB" }
                 ]
             }
         ]
